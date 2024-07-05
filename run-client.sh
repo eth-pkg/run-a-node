@@ -50,6 +50,12 @@ run_node_usage() {
 [ --consensus-client lighthouse|lodestar|nimbus-eth2|prysm|teku ] \
 [ --execution-client besu|erigon|geth|nethermind ] \
 [ --run execution|consensus|validator|bootnode ] \
+[ --with-builder ( both EL and CL ) ] \
+[ --with-graphql ( only EL ) ] \
+[ --with-metrics ( both EL and CL) ] \
+[ --with-http (both EL and CL) ] \
+[ --with-tx-pool (only EL) ] \
+[ --with-ws (only EL) ] \
 [ --with-validator ]
 "
     exit 1
@@ -75,12 +81,24 @@ run_node_parse_options() {
     consensus_client=
     execution_client=
     run=
-    run_validator=false
+    with_builder=
+    with_graphql=
+    with_metrics=
+    with_http=
+    with_tx_pool=
+    with_ws=
+    with_validator=
 
     OPTS=$(getopt -o '' -l "network:\
                             ,consensus-client:\
                             ,execution-client:\
                             ,run:\
+                            ,with-builder:\
+                            ,with-graphql:\
+                            ,with-metrics:\
+                            ,with-http:\
+                            ,with-tx-pool:\
+                            ,with-ws:\
                             ,with-validator" -n "$0" -- "$@")
     if [ $? != 0 ]; then
         run_node_usage
@@ -106,10 +124,34 @@ run_node_parse_options() {
                 run="$2"
                 shift 2
                 ;;
-            --with-validator)
-                run_validator=true
+            --with-builder)
+                with_builder=true
+                shift 1
+                ;;     
+            --with-graphql)
+                with_graphql=true
                 shift 1
                 ;;       
+            --with-metrics)
+                with_metrics=true
+                shift 1
+                ;;     
+            --with-http)
+                with_http=true
+                shift 1
+                ;;  
+            --with-tx-pool)
+                with_tx_pool=true
+                shift 1
+                ;;   
+            --with-ws)
+                with_ws=true
+                shift 1
+                ;;              
+            --with-validator)
+                with_validator=true
+                shift 1
+                ;;             
             --)
                 shift
                 break
@@ -175,7 +217,7 @@ run_node_parse_options() {
     echo "Consensus Client: $consensus_client"
     echo "Execution Client: $execution_client"
     echo "Running Client: $run"
-    echo "Run a validator: $run_validator"
+    echo "Run a validator: $with_validator"
 
 }
 
@@ -185,66 +227,19 @@ run_node_parse_options "$@"
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # source variables
 set -a 
-source "$script_dir/network/$network/$execution_client-$consensus_client/shared.conf"
+source "$script_dir/network/$network/$execution_client-$consensus_client/base.conf"
 set +a
 
-create_data_dir_if_not_exists $SHARED_CONFIG_DATA_DIR
-create_secrets_file_if_not_exists $SHARED_CONFIG_SECRETS_FILE
+create_data_dir_if_not_exists $BASE_CONFIG_DATA_DIR
+create_secrets_file_if_not_exists $BASE_CONFIG_SECRETS_FILE
 
 if [ "$network" == "ephemery" ]; then 
-    echo "fetching ephemery state"
-    # TODO option to reset
-    # rm -rf $ephemery_dir
-    if [ ! -d "$SHARED_CONFIG_TESTNET_DIR" ];then
-        wget -q https://github.com/ephemery-testnet/ephemery-genesis/releases/download/ephemery-111/testnet-all.tar.gz
-        mkdir $SHARED_CONFIG_TESTNET_DIR && tar -xzf testnet-all.tar.gz -C $SHARED_CONFIG_TESTNET_DIR
-        rm testnet-all.tar.gz 
-    fi 
-    SHARED_CONFIG_NETWORK_ID=$(cat $SHARED_CONFIG_TESTNET_DIR/genesis.json | grep chainId | tr -d ',' | sed 's/"chainId"://g' | tr -d '[:space:]')
-    ENR_FILE="$SHARED_CONFIG_TESTNET_DIR/boot_enr.txt"
-    SHARED_CONFIG_BOOTNODES=$(awk '{printf "%s,", $0}' "$ENR_FILE" | sed -e "s/- enr/enr/g" -e 's/,$//')
-    SHARED_CONFIG_BOOTNODES_ENODE=$(awk '{printf "%s,", $0}' $SHARED_CONFIG_TESTNET_DIR/boot_enode.txt | sed 's/,$//')
+    source ./handle_ephemery.sh
+fi 
 
-    export SHARED_CONFIG_NETWORK_ID
-    export SHARED_CONFIG_BOOTNODES
-    export SHARED_CONFIG_BOOTNODES_ENODE
-fi
-
-if [ "$network" == "devnet" ]; then 
-    CHAIN_ID=${CHAIN_ID:-32382}
-    GENESIS_TIME_DELAY=15
-    PRYSMCTL=/usr/lib/eth-node-prysm/bin/prysmctl
-
-    create_data_dir_if_not_exists $SHARED_VALIDATOR_DATADIR
-    # TODO option to reset
-    if [ ! -d "$SHARED_CONFIG_TESTNET_DIR" ];then
-        echo "creating genesis state"
-
-        docker run --rm -it -v $SHARED_CONFIG_DATA_DIR:/data \
-        -v $PWD/devnet/config/defaults.env:/config/values.env \
-        ethpandaops/ethereum-genesis-generator:latest all
-
-        mv $SHARED_CONFIG_DATA_DIR/custom_config_data $SHARED_CONFIG_TESTNET_DIR
-        sudo chown -R "$(id -u):$(id -g)" $SHARED_CONFIG_TESTNET_DIR
-         
-        touch "$SHARED_CONFIG_DATA_DIR/geth_password.txt"
-
-        if [ "$execution_client" = "geth" ];then 
-            # 3. Initialize Geth genesis configuration
-            geth --datadir=$SHARED_CONFIG_DATA_DIR init $SHARED_CONFIG_GENESIS_FILE 
-            cp "./devnet/sk.json" "$SHARED_CONFIG_DATA_DIR"
-            cp -R "./devnet/keystore" "$SHARED_CONFIG_DATA_DIR"
-        fi 
-
-    fi 
-    SHARED_GENESIS_TIME=$(jq -r '.genesis_time' $SHARED_CONFIG_TESTNET_DIR/parsedBeaconState.json)
-    SHARED_CONFIG_NETWORK_ID=$CHAIN_ID
-    
-    echo "SHARED_GENESIS_TIME: $SHARED_GENESIS_TIME"
-
-    export SHARED_GENESIS_TIME
-    export SHARED_CONFIG_NETWORK_ID
-fi
+if [ "$network" == "testnet" ]; then 
+    source ./handle_ephemery.sh
+fi 
 
 script=""
 
@@ -252,18 +247,39 @@ latest_execution_client_version=${latest_clients["$execution_client"]}
 latest_consensus_client_version=${latest_clients["$consensus_client"]}
 
 SHARED_RUN="$run"
+ADDITIONAL_CONFS=""
 
+if [ "$run" = "execution" ]; then
+    client_name="$execution_client"
+elif [ "$run" = "consensus" ]; then
+    client_name="$consensus_client"
+fi
+
+if [ "$client_name" ]; then
+    [ "$with_builder" ] && ADDITIONAL_CONFS="$ADDITIONAL_CONFS --conf-file $script_dir/network/$network/$execution_client-$consensus_client/$client_name-builder.conf"
+    [ "$with_metrics" ] && ADDITIONAL_CONFS="$ADDITIONAL_CONFS --conf-file $script_dir/network/$network/$execution_client-$consensus_client/$client_name-metrics.conf"
+    [ "$with_http" ] && ADDITIONAL_CONFS="$ADDITIONAL_CONFS --conf-file $script_dir/network/$network/$execution_client-$consensus_client/$client_name-http.conf"
+    
+    if [ "$run" = "execution" ]; then
+        [ "$with_tx_pool" ] && ADDITIONAL_CONFS="$ADDITIONAL_CONFS --conf-file $script_dir/network/$network/$execution_client-$consensus_client/$client_name-tx-pool.conf"
+        [ "$with_ws" ] && ADDITIONAL_CONFS="$ADDITIONAL_CONFS --conf-file $script_dir/network/$network/$execution_client-$consensus_client/$client_name-ws.conf"
+    fi
+    
+  
+fi
+if [ "$run" = "consensus" ]; then 
+    if [ "$with_validator" = true ]; then
+        ADDITIONAL_CONFS="$ADDITIONAL_CONFS --conf-file $script_dir/network/$network/$execution_client-$consensus_client/$client_name-with-validator.conf"
+    else
+        ADDITIONAL_CONFS="$ADDITIONAL_CONFS --conf-file $script_dir/network/$network/$execution_client-$consensus_client/$client_name-without-validator.conf"
+    fi
+fi 
 export SHARED_RUN
 
-if [ "$run" = "execution" ]; then 
-    script="$script_dir/clients/$execution_client/$latest_execution_client_version/run-$execution_client.sh"
+if [ "$client_name" ] ; then 
+    script="$script_dir/clients/$execution_client/$latest_execution_client_version/run-$client_name.sh"
     chmod +x "$script"
-    $script --env-file "$script_dir/network/$network/$execution_client-$consensus_client/$execution_client.conf"
-
-elif [ "$run" = "consensus" ]; then 
-    script="$script_dir/clients/$consensus_client/$latest_consensus_client_version/run-$consensus_client.sh"
-    chmod +x "$script"
-    $script --env-file "$script_dir/network/$network/$execution_client-$consensus_client/$consensus_client.conf"
+    $script --conf-file "$script_dir/network/$network/$execution_client-$consensus_client/$client_name-base.conf" $ADDITIONAL_CONFS
 elif [ "$run" = "validator" ]; then 
     script="$script_dir/clients/$consensus_client/$latest_consensus_client_version/run-validator.sh"
     chmod +x "$script"
