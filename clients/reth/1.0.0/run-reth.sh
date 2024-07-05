@@ -199,6 +199,6 @@ append_option "--color" "$RETH_CLI_NODE_COLOR"
 append_option "--verbosity" "$RETH_CLI_NODE_VERBOSITY"
 append_flag "--quiet" "$RETH_CLI_NODE_QUIET"
 
-echo "Starting node with options: reth $OPTIONS"
+echo "Starting node with options: reth node $OPTIONS"
 
-reth $OPTIONS
+reth node $OPTIONS
