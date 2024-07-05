@@ -16,18 +16,12 @@ Open two terminals and execute the following commands:
 
 Terminal 1:
 ```bash 
-bash run-a-client.sh --network <network> \
-                     --consensus-client <consensus_client> \
-                     --execution-client <execution_client> \
-                     --run execution 
+bash run-a-client.sh --network <network> --cl <consensus_client>
 ```
 
 Terminal 2:
 ```bash
-bash run-a-client.sh --network <network> \
-                     --consensus-client <consensus_client> \
-                     --execution-client <execution_client> \
-                     --run consensus 
+bash run-a-client.sh --network <network> --el <execution_client>
 ```
 
 ## Running a client pair with one script
@@ -35,9 +29,7 @@ bash run-a-client.sh --network <network> \
 This will run a node with the selected network and clients. Note this is intended as an example.
 
 ```bash
-bash run-a-node.sh --network <network> \
-                   --consensus-client <consensus_client> \
-                   --execution-client <execution_client>
+bash run-a-node.sh --network <network> --cl <consensus_client> --el <execution_client>
 ```
 
 ## Available Options

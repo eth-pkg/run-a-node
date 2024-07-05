@@ -35,12 +35,9 @@ create_secrets_file_if_not_exists() {
 
 run_node_usage() {
     echo "Usage: $0 [ --network mainnet|sepolia|ephemery|holesky|devnet ] \
-[ --consensus-client lighthouse|lodestar|nimbus-eth2|prysm|teku ] \
-[ --execution-client besu|erigon|geth|nethermind ] \
-[ --run execution|consensus|validator ]"
+[ --cl lighthouse|lodestar|nimbus-eth2|prysm|teku | --el besu|erigon|geth|nethermind ]"
     exit 1
 }
-
 is_valid_option() {
     local option="$1"
     shift
@@ -60,12 +57,15 @@ run=
 run_node_parse_options() {
 
     local opts
-    opts=$(getopt -o '' -l "network:,consensus-client:,execution-client:,run:" -n "$0" -- "$@")
+    opts=$(getopt -o '' -l "network:,cl:,el:" -n "$0" -- "$@")
     if [ $? != 0 ]; then
         run_node_usage
     fi
 
     eval set -- "$opts"
+
+    local consensus_client_set=false
+    local execution_client_set=false
 
     while true; do
         case "$1" in
@@ -73,16 +73,24 @@ run_node_parse_options() {
                 network="$2"
                 shift 2
                 ;;
-            --consensus-client)
+            --cl)
+                if [ "$execution_client_set" = true ]; then
+                    echo "Only one of consensus-client or execution-client is allowed."
+                    run_node_usage
+                fi
                 consensus_client="$2"
+                consensus_client_set=true
+                run="consensus"
                 shift 2
                 ;;
-            --execution-client)
+            --el)
+                if [ "$consensus_client_set" = true ]; then
+                    echo "Only one of consensus-client or execution-client is allowed."
+                    run_node_usage
+                fi
                 execution_client="$2"
-                shift 2
-                ;;
-            --run)
-                run="$2"
+                execution_client_set=true
+                run="execution"
                 shift 2
                 ;;
             --)
@@ -100,18 +108,18 @@ run_node_parse_options() {
         run_node_usage
     fi
 
-    if [ -z "$consensus_client" ]; then
-        echo "Please provide a consensus-client value"
+    if [ "$consensus_client_set" = false ] && [ "$execution_client_set" = false ]; then
+        echo "Please provide either a consensus-client or an execution-client value"
         run_node_usage
     fi
 
-    if [ -z "$execution_client" ]; then
-        echo "Please provide an execution-client value"
+    if [ "$consensus_client_set" = true ] && ! is_valid_option "$consensus_client" "${VALID_CONSENSUS_CLIENTS[@]}"; then
+        echo "Invalid consensus client: $consensus_client"
         run_node_usage
     fi
 
-    if [ -z "$run" ]; then
-        echo "Please provide a run value"
+    if [ "$execution_client_set" = true ] && ! is_valid_option "$execution_client" "${VALID_EXECUTION_CLIENTS[@]}"; then
+        echo "Invalid execution client: $execution_client"
         run_node_usage
     fi
 
@@ -120,36 +128,19 @@ run_node_parse_options() {
         run_node_usage
     fi
 
-    if ! is_valid_option "$consensus_client" "${VALID_CONSENSUS_CLIENTS[@]}"; then
-        echo "Invalid consensus client: $consensus_client"
-        run_node_usage
-    fi
-
-    if ! is_valid_option "$execution_client" "${VALID_EXECUTION_CLIENTS[@]}"; then
-        echo "Invalid execution client: $execution_client"
-        run_node_usage
-    fi
-
-    if ! is_valid_option "$run" "${VALID_RUN_OPTIONS[@]}"; then
-        echo "Invalid run option: $run"
-        run_node_usage
-    fi
-
     echo "Network: $network"
-    echo "Consensus Client: $consensus_client"
-    echo "Execution Client: $execution_client"
+    if [ "$consensus_client_set" = true ]; then
+        echo "Consensus Client: $consensus_client"
+    fi
+    if [ "$execution_client_set" = true ]; then
+        echo "Execution Client: $execution_client"
+    fi
     echo "Running Client: $run"
 }
 
 run_node_parse_options "$@"
 
-latest_execution_client_version=${LATEST_CLIENTS["$execution_client"]}
-latest_consensus_client_version=${LATEST_CLIENTS["$consensus_client"]}
 
-EXECUTION_CLIENT=$execution_client
-CONSENSUS_CLIENT=$consensus_client
-EXECUTION_CLIENT_VERSION=$latest_execution_client_version
-CONSENSUS_CLIENT_VERSION=$latest_consensus_client_version
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 set -a 
@@ -160,9 +151,8 @@ create_data_dir_if_not_exists "$BASE_CONFIG_DATA_DIR"
 create_secrets_file_if_not_exists "$BASE_CONFIG_SECRETS_FILE"
 
 if [[ "$network" == "ephemery" ]] || [[ "$network" == "testnet" ]]; then
-    source "$script_dir/handle_ephemery.sh"
+    source "$script_dir/handle_$network.sh"
 fi
-
 
 
 shared_run="$run"
@@ -173,10 +163,16 @@ latest_client_version=
 if [ "$run" == "execution" ]; then
     client_name="$execution_client"
     sub_dir="el"
+    latest_execution_client_version=${LATEST_CLIENTS["$execution_client"]}
+    EXECUTION_CLIENT=$execution_client
+    EXECUTION_CLIENT_VERSION=$latest_execution_client_version
     latest_client_version=$latest_execution_client_version
 elif [ "$run" == "consensus" ]; then
     client_name="$consensus_client"
     sub_dir="cl"
+    CONSENSUS_CLIENT=$consensus_client
+    latest_consensus_client_version=${LATEST_CLIENTS["$consensus_client"]}
+    CONSENSUS_CLIENT_VERSION=$latest_consensus_client_version
     latest_client_version=$latest_consensus_client_version
 fi
 
