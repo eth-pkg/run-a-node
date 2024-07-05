@@ -17,14 +17,15 @@ if [ "$network" == "testnet" ]; then
          
         touch "$BASE_CONFIG_DATA_DIR/geth_password.txt"
 
-        if [ "$execution_client" = "geth" ];then 
-            # 3. Initialize Geth genesis configuration
-            geth --datadir=$BASE_CONFIG_DATA_DIR init $BASE_CONFIG_CUSTOM_NETWORK_GENESIS_FILE 
-            cp "./devnet/sk.json" "$BASE_CONFIG_DATA_DIR"
-            cp -R "./devnet/keystore" "$BASE_CONFIG_DATA_DIR"
-        fi 
 
     fi 
+    if [ "$execution_client" = "geth" ];then 
+        # 3. Initialize Geth genesis configuration
+        geth --datadir=$BASE_CONFIG_DATA_DIR init $BASE_CONFIG_CUSTOM_NETWORK_GENESIS_FILE 
+        cp "./devnet/sk.json" "$BASE_CONFIG_DATA_DIR"
+        cp -R "./devnet/keystore" "$BASE_CONFIG_DATA_DIR"
+    fi 
+
     SHARED_GENESIS_TIME=$(jq -r '.genesis_time' $BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR/parsedBeaconState.json)
     SHARED_CONFIG_NETWORK_ID=$CHAIN_ID
     

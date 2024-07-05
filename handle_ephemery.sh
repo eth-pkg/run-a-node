@@ -8,7 +8,7 @@ if [ "$network" == "ephemery" ]; then
     # rm -rf $ephemery_dir
     if [ ! -d "$BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR" ];then
         wget -q https://github.com/ephemery-testnet/ephemery-genesis/releases/download/ephemery-111/testnet-all.tar.gz
-        mkdir $SHARED_CONFIG_TESTNET_DIR && tar -xzf testnet-all.tar.gz -C $BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR
+        mkdir $BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR && tar -xzf testnet-all.tar.gz -C $BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR
         rm testnet-all.tar.gz 
     fi 
     BASE_CONFIG_CUSTOM_NETWORK_NETWORK_ID=$(cat $BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR/genesis.json | grep chainId | tr -d ',' | sed 's/"chainId"://g' | tr -d '[:space:]')
