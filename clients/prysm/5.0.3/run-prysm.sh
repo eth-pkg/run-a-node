@@ -6,7 +6,7 @@ display_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --env-file FILE, -e FILE   Path to .env formatted configuration file."    
+    echo "  --conf-file FILE, -e FILE   Path to .conf formatted configuration file."   
     echo "  --help, -h                    Displays this help text and exits."
     echo "  --version, -v                 Displays the version and exits."
     exit 0
@@ -18,14 +18,14 @@ display_version() {
     exit 0
 }
 
-CONFIG_FILE=""
+CONFIG_FILES=()
 HELP=false
 VERSION=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --env-file|-e)
-            CONFIG_FILE="$2"
+        --conf-file|-e)
+            CONFIG_FILES+=("$2")
             shift 2
             ;;
         --help|-h)
@@ -51,19 +51,20 @@ if [ "$VERSION" = true ]; then
     display_version
 fi
 
-if [ -z "$CONFIG_FILE" ]; then
-    echo "Error: Configuration file is required. Use --config-file option."
+if [[ ${#CONFIG_FILES[@]} -eq 0 ]]; then
+    echo "Error: At least one --conf-file option is required"
     display_help
 fi
 
-if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
-else
-    echo "Error: Configuration file not found: $CONFIG_FILE"
-    exit 1
-fi
-
-echo "Starting with configuration from $CONFIG_FILE"
+for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+    if [[ -f "$CONFIG_FILE" ]]; then
+        echo "Starting with configuration from $CONFIG_FILE"
+        source "$CONFIG_FILE"
+    else
+        echo "Error: Configuration file $CONFIG_FILE not found."
+        exit 1
+    fi
+done
 
 OPTIONS=""
 
@@ -71,7 +72,7 @@ append_option() {
   local option=$1
   local value=$2
   if [ -n "$value" ]; then
-    OPTIONS="$OPTIONS $option $value"
+    OPTIONS="$OPTIONS $option=$value"
   fi
 }
 
@@ -83,12 +84,6 @@ append_flag(){
   fi 
 }
 
-append_flag(){
-  local option=$1
-  if [ "$2" = "true" ]; then
-    OPTIONS="$OPTIONS $option"
-  fi 
-}
 
 append_flag "--accept-terms-of-use" "$PRSYM_CLI_ACCEPT_TERMS_OF_USE"
 append_flag "--disable-monitoring" "$PRSYM_CLI_DISABLE_MONITORING"
@@ -123,7 +118,7 @@ append_flag "--save-invalid-block-temp" "$PRSYM_CLI_SAVE_INVALID_BLOCK_TEMP"
 append_flag "--sepolia" "$PRSYM_CLI_SEPOLIA"
 append_flag "--slasher" "$PRSYM_CLI_SLASHER"
 append_flag "--interop-eth1data-votes" "$PRSYM_CLI_INTEROP_ETH1DATA_VOTES"
-
+append_flag "--force-clear-db" "$PRSYM_CLI_FORCE_CLEAR_DB"
 
 
 append_option "--api-timeout" "$PRSYM_CLI_API_TIMEOUT"
@@ -133,7 +128,6 @@ append_option "--clear-db" "$PRSYM_CLI_CLEAR_DB"
 append_option "--config-file" "$PRSYM_CLI_CONFIG_FILE"
 append_option "--datadir" "$PRSYM_CLI_DATADIR"
 append_option "--e2e-config" "$PRSYM_CLI_E2E_CONFIG"
-append_option "--force-clear-db" "$PRSYM_CLI_FORCE_CLEAR_DB"
 append_option "--grpc-max-msg-size" "$PRSYM_CLI_GRPC_MAX_MSG_SIZE"
 append_option "--max-goroutines" "$PRSYM_CLI_MAX_GOROUTINES"
 append_option "--minimal-config" "$PRSYM_CLI_MINIMAL_CONFIG"

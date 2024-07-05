@@ -6,7 +6,7 @@ display_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --env-file FILE, -e FILE   Path to .env formatted configuration file."    
+    echo "  --conf-file FILE, -e FILE   Path to .conf formatted configuration file."   
     echo "  --help, -h                    Displays this help text and exits."
     echo "  --version, -v                 Displays the version and exits."
     exit 0
@@ -18,14 +18,14 @@ display_version() {
     exit 0
 }
 
-CONFIG_FILE=""
+CONFIG_FILES=()
 HELP=false
 VERSION=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --env-file|-e)
-            CONFIG_FILE="$2"
+        --conf-file|-e)
+            CONFIG_FILES+=("$2")
             shift 2
             ;;
         --help|-h)
@@ -51,19 +51,20 @@ if [ "$VERSION" = true ]; then
     display_version
 fi
 
-if [ -z "$CONFIG_FILE" ]; then
-    echo "Error: Configuration file is required. Use --config-file option."
+if [[ ${#CONFIG_FILES[@]} -eq 0 ]]; then
+    echo "Error: At least one --conf-file option is required"
     display_help
 fi
 
-if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
-else
-    echo "Error: Configuration file not found: $CONFIG_FILE"
-    exit 1
-fi
-
-echo "Starting with configuration from $CONFIG_FILE"
+for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+    if [[ -f "$CONFIG_FILE" ]]; then
+        echo "Starting with configuration from $CONFIG_FILE"
+        source "$CONFIG_FILE"
+    else
+        echo "Error: Configuration file $CONFIG_FILE not found."
+        exit 1
+    fi
+done
 
 OPTIONS=""
 
@@ -71,7 +72,7 @@ append_option() {
   local option=$1
   local value=$2
   if [ -n "$value" ]; then
-    OPTIONS="$OPTIONS $option $value"
+    OPTIONS="$OPTIONS $option=$value"
   fi
 }
 
@@ -82,7 +83,6 @@ append_flag(){
     OPTIONS="$OPTIONS $option"
   fi 
 }
-
 append_flag "--allow-insecure-genesis-sync" "$LIGHTHOUSE_CLI_BN_ALLOW_INSECURE_GENESIS_SYNC"
 append_flag "--always-prefer-builder-payload" "$LIGHTHOUSE_CLI_BN_ALWAYS_PREFER_BUILDER_PAYLOAD"
 append_flag "--always-prepare-payload" "$LIGHTHOUSE_CLI_BN_ALWAYS_PREPARE_PAYLOAD"
@@ -236,6 +236,6 @@ append_option "--validator-monitor-individual-tracking-threshold" "$LIGHTHOUSE_C
 append_option "--validator-monitor-pubkeys" "$LIGHTHOUSE_CLI_BN_VALIDATOR_MONITOR_PUBKEYS"
 append_option "--wss-checkpoint" "$LIGHTHOUSE_CLI_BN_WSS_CHECKPOINT"
 
-echo "Using Options: $OPTIONS"
 
+echo "Starting lighthouse beacon_node $OPTIONS"
 lighthouse beacon_node $OPTIONS

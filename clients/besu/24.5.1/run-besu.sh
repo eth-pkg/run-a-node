@@ -7,7 +7,7 @@ display_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --env-file FILE, -e FILE   Path to .env formatted configuration file."   
+    echo "  --conf-file FILE, -e FILE   Path to .conf formatted configuration file."   
     echo "  --help, -h                    Displays this help text and exits."
     echo "  --version, -v                 Displays the version and exits."
     exit 0
@@ -19,14 +19,14 @@ display_version() {
     exit 0
 }
 
-CONFIG_FILE=""
+CONFIG_FILES=()
 HELP=false
 VERSION=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --env-file|-e)
-            CONFIG_FILE="$2"
+        --conf-file|-e)
+            CONFIG_FILES+=("$2")
             shift 2
             ;;
         --help|-h)
@@ -52,19 +52,21 @@ if [ "$VERSION" = true ]; then
     display_version
 fi
 
-if [ -z "$CONFIG_FILE" ]; then
-    echo "Error: Configuration file is required. Use --config-file option."
+if [[ ${#CONFIG_FILES[@]} -eq 0 ]]; then
+    echo "Error: At least one --conf-file option is required"
     display_help
 fi
 
-if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
-else
-    echo "Error: Configuration file not found: $CONFIG_FILE"
-    exit 1
-fi
+for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+    if [[ -f "$CONFIG_FILE" ]]; then
+        echo "Starting with configuration from $CONFIG_FILE"
+        source "$CONFIG_FILE"
+    else
+        echo "Error: Configuration file $CONFIG_FILE not found."
+        exit 1
+    fi
+done
 
-echo "Starting with configuration from $CONFIG_FILE"
 
 
 OPTIONS=""
@@ -73,7 +75,7 @@ append_option() {
   local option=$1
   local value=$2
   if [ -n "$value" ]; then
-    OPTIONS="$OPTIONS $option $value"
+    OPTIONS="$OPTIONS $option=$value"
   fi
 }
 
@@ -241,6 +243,9 @@ append_option "--rpc-gas-cap" "$BESU_CLI_RPC_GAS_CAP"
 append_option "--rpc-max-logs-range" "$BESU_CLI_RPC_MAX_LOGS_RANGE"
 append_option "--rpc-max-trace-filter-range" "$BESU_CLI_RPC_MAX_TRACE_FILTER_RANGE"
 
-echo "Using Options: $OPTIONS"
+# TODO missing options
+append_option "--bonsai-limit-trie-logs-enabled" "$BESU_CLI_BONSAI_LIMIT_TRIE_LOGS_ENABLED"
+
+echo "Running: besu $OPTIONS"
 
 besu $OPTIONS

@@ -6,7 +6,7 @@ display_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --env-file FILE, -e FILE   Path to .env formatted configuration file."    
+    echo "  --conf-file FILE, -e FILE   Path to .conf formatted configuration file."   
     echo "  --help, -h                    Displays this help text and exits."
     echo "  --version, -v                 Displays the version and exits."
     exit 0
@@ -18,14 +18,14 @@ display_version() {
     exit 0
 }
 
-CONFIG_FILE=""
+CONFIG_FILES=()
 HELP=false
 VERSION=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --env-file|-e)
-            CONFIG_FILE="$2"
+        --conf-file|-e)
+            CONFIG_FILES+=("$2")
             shift 2
             ;;
         --help|-h)
@@ -51,19 +51,20 @@ if [ "$VERSION" = true ]; then
     display_version
 fi
 
-if [ -z "$CONFIG_FILE" ]; then
-    echo "Error: Configuration file is required. Use --config-file option."
+if [[ ${#CONFIG_FILES[@]} -eq 0 ]]; then
+    echo "Error: At least one --conf-file option is required"
     display_help
 fi
 
-if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
-else
-    echo "Error: Configuration file not found: $CONFIG_FILE"
-    exit 1
-fi
-
-echo "Starting with configuration from $CONFIG_FILE"
+for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+    if [[ -f "$CONFIG_FILE" ]]; then
+        echo "Starting with configuration from $CONFIG_FILE"
+        source "$CONFIG_FILE"
+    else
+        echo "Error: Configuration file $CONFIG_FILE not found."
+        exit 1
+    fi
+done
 
 
 OPTIONS=""
@@ -72,7 +73,7 @@ append_option() {
   local option=$1
   local value=$2
   if [ -n "$value" ]; then
-    OPTIONS="$OPTIONS $option $value"
+    OPTIONS="$OPTIONS $option=$value"
   fi
 }
 
@@ -88,11 +89,12 @@ append_flag "--allow-insecure-unlock" "$GETH_CLI_ALLOW_INSECURE_UNLOCK"
 append_flag "--graphql" "$GETH_CLI_GRAPHQL"
 append_flag "--http" "$GETH_CLI_HTTP"
 append_flag "--ws" "$GETH_CLI_WS"
-append_flag "--dev" "$GETH_CLI_WS"
+append_flag "--dev" "$GETH_CLI_DEV"
 append_flag "--goerli" "$GETH_CLI_GOERLI"
 append_flag "--holesky" "$GETH_CLI_HOLESKY"
 append_flag "--mainnet" "$GETH_CLI_MAINNET"
 append_flag "--sepolia" "$GETH_CLI_SEPOLIA"
+append_flag "--nodiscover" "$GETH_CLI_NODISCOVER"
 
 append_option "--keystore" "$GETH_CLI_KEYSTORE"
 append_option "--lightkdf" "$GETH_CLI_LIGHTKDF"
@@ -225,7 +227,6 @@ append_option "--nat" "$GETH_CLI_NAT"
 append_option "--netrestrict" "$GETH_CLI_NETRESTRICT"
 append_option "--nodekey" "$GETH_CLI_NODEKEY"
 append_option "--nodekeyhex" "$GETH_CLI_NODEKEYHEX"
-append_option "--nodiscover" "$GETH_CLI_NODISCOVER"
 append_option "--port" "$GETH_CLI_PORT"
 append_option "--cache" "$GETH_CLI_CACHE"
 append_option "--cache.blocklogs" "$GETH_CLI_CACHE_BLOCKLOGS"

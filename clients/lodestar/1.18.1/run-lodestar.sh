@@ -6,7 +6,7 @@ display_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --env-file FILE, -e FILE   Path to .env formatted configuration file."    
+    echo "  --conf-file FILE, -e FILE   Path to .conf formatted configuration file."   
     echo "  --help, -h                    Displays this help text and exits."
     echo "  --version, -v                 Displays the version and exits."
     exit 0
@@ -18,14 +18,14 @@ display_version() {
     exit 0
 }
 
-CONFIG_FILE=""
+CONFIG_FILES=()
 HELP=false
 VERSION=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --env-file|-e)
-            CONFIG_FILE="$2"
+        --conf-file|-e)
+            CONFIG_FILES+=("$2")
             shift 2
             ;;
         --help|-h)
@@ -51,19 +51,20 @@ if [ "$VERSION" = true ]; then
     display_version
 fi
 
-if [ -z "$CONFIG_FILE" ]; then
-    echo "Error: Configuration file is required. Use --config-file option."
+if [[ ${#CONFIG_FILES[@]} -eq 0 ]]; then
+    echo "Error: At least one --conf-file option is required"
     display_help
 fi
 
-if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
-else
-    echo "Error: Configuration file not found: $CONFIG_FILE"
-    exit 1
-fi
-
-echo "Starting with configuration from $CONFIG_FILE"
+for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+    if [[ -f "$CONFIG_FILE" ]]; then
+        echo "Starting with configuration from $CONFIG_FILE"
+        source "$CONFIG_FILE"
+    else
+        echo "Error: Configuration file $CONFIG_FILE not found."
+        exit 1
+    fi
+done
 
 OPTIONS=""
 
@@ -87,7 +88,7 @@ append_flag "--forceCheckpointSync" "$LODESTAR_CLI_BN_FORCE_CHECKPOINT_SYNC"
 append_flag "--rest" "$LODESTAR_CLI_BN_REST"
 append_flag "--rest.swaggerUI" "$LODESTAR_CLI_BN_REST_SWAGGER_UI"
 append_flag "--emitPayloadAttributes" "$LODESTAR_CLI_BN_EMIT_PAYLOAD_ATTRIBUTES"
-append_flag "--eth1" "$LODESTAR_CLI_BN_ETH1"
+append_option "--eth1" "$LODESTAR_CLI_BN_ETH1"
 append_flag "--builder" "$LODESTAR_CLI_BN_BUILDER"
 append_flag "--metrics" "$LODESTAR_CLI_BN_METRICS"
 append_flag "--discv5" "$LODESTAR_CLI_BN_DISCV5"
@@ -100,7 +101,11 @@ append_flag "--validatorMonitorLogs" "$LODESTAR_CLI_BN_VALIDATOR_MONITOR_LOGS"
 append_option "--checkpointSyncUrl" "$LODESTAR_CLI_BN_CHECKPOINT_SYNC_URL"
 append_option "--checkpointState" "$LODESTAR_CLI_BN_CHECKPOINT_STATE"
 append_option "--wssCheckpoint" "$LODESTAR_CLI_BN_WSS_CHECKPOINT"
-append_option "--rest.namespace" "$LODESTAR_CLI_BN_REST_NAMESPACE"
+if [ "$LODESTAR_CLI_DEV_REST_NAMESPACE" == "*" ]; then
+    OPTIONS="$OPTIONS --rest.namespace '*'"
+else  
+    append_option "--rest.namespace" "$LODESTAR_CLI_DEV_REST_NAMESPACE"
+fi 
 append_option "--rest.cors" "$LODESTAR_CLI_BN_REST_CORS"
 append_option "--rest.address" "$LODESTAR_CLI_BN_REST_ADDRESS"
 append_option "--rest.port" "$LODESTAR_CLI_BN_REST_PORT"
@@ -147,7 +152,10 @@ append_option "--logLevel" "$LODESTAR_CLI_BN_LOG_LEVEL"
 append_option "--logFile" "$LODESTAR_CLI_BN_LOG_FILE"
 append_option "--logFileLevel" "$LODESTAR_CLI_BN_LOG_FILE_LEVEL"
 append_option "--logFileDailyRotate" "$LODESTAR_CLI_BN_LOG_FILE_DAILY_ROTATE"
+# TODO lodestar undocumented options
+append_option "--eth1.depositContractDeployBlock" "$LODESTAR_CLI_ETH1_DEPOSIT_CONTRACT_DEPLOY_BLOCK"
+append_option "--network.connectToDiscv5Bootnodes" "$LODESTAR_CLI_NETWORK_CONNECT_TO_DISCV5_BOOTNODES"
+append_option "--genesisStateFile" "$LODESTAR_CLI_BN_GENSIS_STATE_FILE"
 
-echo "Using Options: $OPTIONS"
-
+echo "Starting lodestar beacon $OPTIONS"
 lodestar beacon $OPTIONS
