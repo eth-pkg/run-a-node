@@ -267,6 +267,6 @@ if [ -n "$SHARED_CONFIG_GENESIS_FILE" ]; then
     geth init --datadir "$GETH_CLI_DATADIR" "$SHARED_CONFIG_GENESIS_FILE"
 fi
 
-echo "Using Options: $OPTIONS"
+echo "Using Options: geth $OPTIONS"
 
 geth $OPTIONS
