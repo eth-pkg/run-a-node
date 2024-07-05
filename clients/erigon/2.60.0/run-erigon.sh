@@ -292,4 +292,4 @@ add_option "--config" "$ERIGON_CLI_CONFIG"
 
 echo "Using Options: erigon $OPTIONS"
 
-erigon $OPTIONS
+exec erigon $OPTIONS

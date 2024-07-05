@@ -1,3 +1,5 @@
+#!/usr/bin/env bash 
+
 set -e 
 
 display_help() {
@@ -167,4 +169,5 @@ append_option "--interop-start-index" "$PRYSM_CLI_VALIDATOR_INTEROP_START_INDEX"
 
 echo "Using Options: $OPTIONS"
 
-/usr/lib/eth-node-prysm/bin/validator $OPTIONS
+# TODO 
+exec /usr/lib/eth-node-prysm/bin/validator $OPTIONS

@@ -563,4 +563,4 @@ append_option "--Wallet.DevAccounts" "$NETHERMIND_CLI_WALLET_DEV_ACCOUNTS"
 
 echo "Using Options: nethermind $OPTIONS"
 
-nethermind $OPTIONS
+exec nethermind $OPTIONS

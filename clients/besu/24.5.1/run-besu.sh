@@ -2,7 +2,6 @@
 
 set -e 
 
-
 display_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
@@ -248,4 +247,4 @@ append_option "--bonsai-limit-trie-logs-enabled" "$BESU_CLI_BONSAI_LIMIT_TRIE_LO
 
 echo "Running: besu $OPTIONS"
 
-besu $OPTIONS
+exec besu $OPTIONS

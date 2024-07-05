@@ -182,4 +182,4 @@ append_option "--metrics-publish-interval" "$TEKU_CLI_METRICS_PUBLISH_INTERVAL"
 
 echo "Using Options: $OPTIONS"
 
-teku $OPTIONS
+exec teku $OPTIONS

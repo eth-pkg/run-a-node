@@ -218,4 +218,4 @@ append_option "--interop-num-validators" "$PRSYM_CLI_INTEROP_NUM_VALIDATORS"
 
 echo "Using Options: beacon-chain $OPTIONS"
 
-beacon-chain $OPTIONS
+exec beacon-chain $OPTIONS

@@ -132,4 +132,4 @@ append_flag "--distributed" "$LODESTAR_CLI_VALIDATOR_DISTRIBUTED"
 
 echo "Using Options: $OPTIONS"
 
-docker run chainsafe/lodestar validator $OPTIONS
+exec docker run chainsafe/lodestar validator $OPTIONS

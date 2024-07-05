@@ -269,4 +269,4 @@ fi
 
 echo "Using Options: geth $OPTIONS"
 
-geth $OPTIONS
+exec geth $OPTIONS

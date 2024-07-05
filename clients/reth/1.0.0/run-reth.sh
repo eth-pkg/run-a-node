@@ -201,4 +201,4 @@ append_flag "--quiet" "$RETH_CLI_NODE_QUIET"
 
 echo "Starting node with options: reth node $OPTIONS"
 
-reth node $OPTIONS
+exec reth node $OPTIONS

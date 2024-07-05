@@ -163,4 +163,4 @@ echo "Using Options: $OPTIONS"
 
 echo "Using Options: nimbus-eth2 $OPTIONS"
 
-nimbus_beacon_node $OPTIONS
+exec nimbus_beacon_node $OPTIONS

@@ -238,4 +238,4 @@ append_option "--wss-checkpoint" "$LIGHTHOUSE_CLI_BN_WSS_CHECKPOINT"
 
 
 echo "Starting lighthouse beacon_node $OPTIONS"
-lighthouse beacon_node $OPTIONS
+exec lighthouse beacon_node $OPTIONS
