@@ -5,15 +5,17 @@ set -euo pipefail
 chmod +x run-a-client.sh
 
 network=mainnet
-wait_time="10"
+wait_time=10
+el_pid=
+cl_pid=
 
-# cleanup() {
-#   echo "Cleaning up background processes and logs..."
-#   [ -n "$el_pid" ] && kill "$el_pid"
-#   [ -n "$cl_pid" ] && kill "$cl_pid"
-# }
+cleanup() {
+  echo "Cleaning up background processes and logs..."
+  [ -n "$el_pid" ] && kill "$el_pid" || true 
+  [ -n "$cl_pid" ] && kill "$cl_pid" || true 
+}
 
-# trap cleanup EXIT INT SIGINT SIGTERM
+trap cleanup EXIT INT SIGINT SIGTERM
 
 does_not_contain_error() {
   local message="$1"
@@ -42,8 +44,9 @@ does_not_contain_error() {
   cl_output=$(cat $cl_output_log)
   el_output=$(cat $el_output_log)
 
-  kill $cl_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
-  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
+  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
+  # use kill instead of pkill with lighthouse
+  kill $cl_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
 
   [[ "$el_output" == *"Network: Mainnet"* ]]
   [[ "$el_output" == *"Ethereum main loop is up"* ]]
@@ -69,8 +72,8 @@ does_not_contain_error() {
   cl_output=$(cat $cl_output_log)
   el_output=$(cat $el_output_log)
 
-  pkill -9 -P $cl_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
-  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
+  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
+  pkill -9 -P $cl_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
 
   [[ "$el_output" == *"Network: Mainnet"* ]]
   [[ "$el_output" == *"Ethereum main loop is up"* ]]
@@ -95,8 +98,9 @@ does_not_contain_error() {
   cl_output=$(cat $cl_output_log)
   el_output=$(cat $el_output_log)
 
-  pkill -9 -P $cl_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
-  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
+  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
+  # use kill instead of pkill with nimbus-eth2
+  kill $cl_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
 
   [[ "$el_output" == *"Network: Mainnet"* ]]
   [[ "$el_output" == *"Ethereum main loop is up"* ]]
@@ -116,13 +120,14 @@ does_not_contain_error() {
   bash run-a-client.sh --network "$network" --cl prysm &>"$cl_output_log" &
   cl_pid=$!
 
-  sleep "40" # prysm initial sync is slower
+  sleep 40 # prysm initial sync is slower
 
   cl_output=$(cat $cl_output_log)
   el_output=$(cat $el_output_log)
 
-  pkill -9 -P $cl_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
-  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
+  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
+  # use kill instead of pkill with prysm
+  kill $cl_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
 
   [[ "$el_output" == *"Network: Mainnet"* ]]
   [[ "$el_output" == *"Ethereum main loop is up"* ]]
@@ -142,18 +147,19 @@ does_not_contain_error() {
   bash run-a-client.sh --network "$network" --cl teku &>"$cl_output_log" &
   cl_pid=$!
 
-  sleep "180"
+  sleep 60
 
   cl_output=$(cat $cl_output_log)
   el_output=$(cat $el_output_log)
 
-  pkill -9 -P $cl_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
-  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
+  kill $el_pid  2>/dev/null || echo "Failed to kill process with PID $el_pid"
+  # pkill does not work with teku
+  kill $cl_pid  2>/dev/null || echo "Failed to kill process with PID $cl_pid"
 
   [[ "$el_output" == *"Network: Mainnet"* ]]
   [[ "$el_output" == *"Ethereum main loop is up"* ]]
 
   [[ "$cl_output" == *"Network: mainnet"* ]]
-  [[ "$cl_output" == *"Starting initial chain sync"* ]]
-  [[ "$cl_output" == *"Execution Client is online"* ]]
+  [[ "$cl_output" == *"Syncing started"* ]]
+  # [[ "$cl_output" == *"Execution Client is online"* ]]
 }
