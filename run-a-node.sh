@@ -53,23 +53,23 @@ fi
 
 kill_previous_processes
 
-chmod +x run-client.sh
+chmod +x run-a-client.sh
 
 # Run execution client
-nohup run-client.sh --network "$network" --consensus-client "$consensus_client" --execution-client "$execution_client" --run execution $OP_ARGS > $LOGS_DIR/execution.log 2>&1 &
+nohup run-a-client.sh --network "$network" --consensus-client "$consensus_client" --execution-client "$execution_client" --run execution $OP_ARGS > $LOGS_DIR/execution.log 2>&1 &
 EL_CLIENT_PID=$!
 echo "Execution client started with PID $EL_CLIENT_PID"
 echo "$EL_CLIENT_PID" >> "$PID_FILE"
 
 # Run consensus client
-nohup run-client.sh --network "$network" --consensus-client "$consensus_client" --execution-client "$execution_client" --run consensus $OP_ARGS > $LOGS_DIR/consensus.log 2>&1 &
+nohup run-a-client.sh --network "$network" --consensus-client "$consensus_client" --execution-client "$execution_client" --run consensus $OP_ARGS > $LOGS_DIR/consensus.log 2>&1 &
 CL_CLIENT_PID=$!
 echo "Consensus client started with PID $CL_CLIENT_PID"
 echo "$CL_CLIENT_PID" >> "$PID_FILE"
 
 # Run the client with validator if specified
 if [ "$with_validator" == "true" ]; then 
-    nohup run-client.sh --network "$network" --consensus-client "$consensus_client" --execution-client "$execution_client" --run validator $OP_ARGS > $LOGS_DIR/validator.log 2>&1 &
+    nohup run-a-client.sh --network "$network" --consensus-client "$consensus_client" --execution-client "$execution_client" --run validator $OP_ARGS > $LOGS_DIR/validator.log 2>&1 &
     VALIDATOR_CLIENT_PID=$!
     echo "validator client started with PID $VALIDATOR_CLIENT_PID"
     echo "$VALIDATOR_CLIENT_PID" >> "$PID_FILE"

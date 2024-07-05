@@ -30,67 +30,46 @@ Run clients on private local only testnet
 <details>
   <summary>besu - lighthouse</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client besu \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client besu \
-                     --run consensus \
-                     --with-validator
+                     --run consensus
   ```
 
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lighthouse \
-                     --execution-client besu \
-                     --run validator \
-                     --with-validator 
-  ```
 
 </details>
 
 <details>
   <summary>besu - lodestar</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client besu \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client besu \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lodestar \
-                     --execution-client besu \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -98,33 +77,22 @@ Run clients on private local only testnet
 <details>
   <summary>besu - nimbus-eth2</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client besu \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client besu \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client nimbus-eth2 \
-                     --execution-client besu \
-                     --run validator \
-                     --with-validator 
+                     --run consensus 
   ```
 
 </details>
@@ -132,33 +100,22 @@ Run clients on private local only testnet
 <details>
   <summary>besu - prysm</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client besu \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client besu \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client prysm \
-                     --execution-client besu \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -166,33 +123,22 @@ Run clients on private local only testnet
 <details>
   <summary>besu - teku</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client besu \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client besu \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client teku \
-                     --execution-client besu \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -200,33 +146,22 @@ Run clients on private local only testnet
 <details>
   <summary>erigon - lighthouse</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client erigon \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client erigon \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lighthouse \
-                     --execution-client erigon \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -234,33 +169,22 @@ Run clients on private local only testnet
 <details>
   <summary>erigon - lodestar</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client erigon \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client erigon \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lodestar \
-                     --execution-client erigon \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -268,67 +192,44 @@ Run clients on private local only testnet
 <details>
   <summary>erigon - nimbus-eth2</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client erigon \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client erigon \
-                     --run consensus \
-                     --with-validator
+                     --run consensus
   ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client nimbus-eth2 \
-                     --execution-client erigon \
-                     --run validator \
-                     --with-validator 
-  ```
-
 </details>
 
 <details>
   <summary>erigon - prysm</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client erigon \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client erigon \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client prysm \
-                     --execution-client erigon \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -336,35 +237,22 @@ Run clients on private local only testnet
 <details>
   <summary>erigon - teku</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client erigon \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client erigon \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-
-
-  bash run-client.sh --network testnet \
-                     --consensus-client teku \
-                     --execution-client erigon \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -372,33 +260,22 @@ Run clients on private local only testnet
 <details>
   <summary>geth - lighthouse</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client geth \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client geth \
-                     --run consensus \
-                     --with-validator 
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lighthouse \
-                     --execution-client geth \
-                     --run validator \
-                     --with-validator
+                     --run consensus 
   ```
 
 </details>
@@ -410,29 +287,18 @@ Run clients on private local only testnet
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client geth \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client geth \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lodestar \
-                     --execution-client geth \
-                     --run validator \
-                     --with-validator 
+                     --run consensus 
   ```
 
 </details>
@@ -444,29 +310,18 @@ Run clients on private local only testnet
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client geth \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client geth \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client nimbus-eth2 \
-                     --execution-client geth \
-                     --run validator \
-                     --with-validator 
+                     --run consensus 
   ```
 
 </details>
@@ -474,67 +329,44 @@ Run clients on private local only testnet
 <details>
   <summary>geth - prysm</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client geth \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client geth \
-                     --run consensus \
-                     --with-validator
+                     --run consensus
   ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client prysm \
-                     --execution-client geth \
-                     --run validator \
-                     --with-validator 
-  ```
-
 </details>
 
 <details>
   <summary>geth - teku</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client geth \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client geth \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client teku \
-                     --execution-client geth \
-                     --run validator \
-                     --with-validator 
+                     --run consensus 
   ```
 
 </details>
@@ -542,33 +374,22 @@ Run clients on private local only testnet
 <details>
   <summary>nethermind - lighthouse</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client nethermind \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lighthouse \
                      --execution-client nethermind \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lighthouse \
-                     --execution-client nethermind \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -576,67 +397,44 @@ Run clients on private local only testnet
 <details>
   <summary>nethermind - lodestar</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client nethermind \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client lodestar \
                      --execution-client nethermind \
-                     --run consensus \
-                     --with-validator
+                     --run consensus
   ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client lodestar \
-                     --execution-client nethermind \
-                     --run validator \
-                     --with-validator 
-  ```
-
 </details>
 
 <details>
   <summary>nethermind - nimbus-eth2</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client nethermind \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client nimbus-eth2 \
                      --execution-client nethermind \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client nimbus-eth2 \
-                     --execution-client nethermind \
-                     --run validator \
-                     --with-validator 
+                     --run consensus
   ```
 
 </details>
@@ -644,67 +442,44 @@ Run clients on private local only testnet
 <details>
   <summary>nethermind - prysm</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client nethermind \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client prysm \
                      --execution-client nethermind \
-                     --run consensus \
-                     --with-validator
+                     --run consensus 
   ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client prysm \
-                     --execution-client nethermind \
-                     --run validator \
-                     --with-validator 
-  ```
-
 </details>
 
 <details>
   <summary>nethermind - teku</summary>
 
-  Open three terminals and execute the following commands:
+  Open two terminals and execute the following commands:
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client nethermind \
-                     --run execution \
-                     --with-validator 
+                     --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network testnet \
+  bash run-a-client.sh --network testnet \
                      --consensus-client teku \
                      --execution-client nethermind \
-                     --run consensus \
-                     --with-validator
-  ```
-
-  Terminal 3:
-  ```bash
-  bash run-client.sh --network testnet \
-                     --consensus-client teku \
-                     --execution-client nethermind \
-                     --run validator \
-                     --with-validator 
+                     --run consensus 
   ```
 
 </details>

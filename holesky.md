@@ -36,12 +36,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client besu --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client besu --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client besu --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client besu --run consensus 
   ```
 </details>
 
@@ -52,12 +52,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client besu --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client besu --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client besu --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client besu --run consensus 
   ```
 </details>
 
@@ -68,12 +68,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client besu --run execution 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client besu --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client besu --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client besu --run consensus 
   ```
 </details>
 
@@ -84,12 +84,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client besu --run execution 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client besu --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client besu --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client besu --run consensus 
   ```
 </details>
 
@@ -100,12 +100,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client teku --execution-client besu --run execution 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client besu --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client teku --execution-client besu --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client besu --run consensus 
   ```
 </details>
 
@@ -116,12 +116,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client erigon --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client erigon --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client erigon --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client erigon --run consensus 
   ```
 </details>
 
@@ -132,12 +132,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client erigon --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client erigon --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client erigon --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client erigon --run consensus 
   ```
 </details>
 
@@ -148,12 +148,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client erigon --run execution 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client erigon --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client erigon --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client erigon --run consensus 
   ```
 </details>
 
@@ -164,12 +164,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client erigon --run execution 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client erigon --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client erigon --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client erigon --run consensus 
   ```
 </details>
 
@@ -180,12 +180,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client teku --execution-client erigon --run execution 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client erigon --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client teku --execution-client erigon --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client erigon --run consensus 
   ```
 </details>
 
@@ -196,12 +196,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client geth --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client geth --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client geth --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client geth --run consensus 
   ```
 </details>
 
@@ -212,12 +212,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client geth --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client geth --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client geth --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client geth --run consensus 
   ```
 </details>
 
@@ -229,12 +229,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client geth --run execution 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client geth --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client geth --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client geth --run consensus 
   ```
 </details>
 
@@ -245,12 +245,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client geth --run execution 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client geth --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client geth --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client geth --run consensus 
   ```
 </details>
 
@@ -261,12 +261,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client teku --execution-client geth --run execution 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client geth --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client teku --execution-client geth --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client geth --run consensus 
   ```
 </details>
 
@@ -277,12 +277,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client nethermind --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client nethermind --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lighthouse --execution-client nethermind --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lighthouse --execution-client nethermind --run consensus 
   ```
 </details>
 
@@ -293,12 +293,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client nethermind --run execution 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client nethermind --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client lodestar --execution-client nethermind --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client lodestar --execution-client nethermind --run consensus 
   ```
 </details>
 
@@ -309,12 +309,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client nethermind --run execution 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client nethermind --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client nethermind --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client nimbus-eth2 --execution-client nethermind --run consensus 
   ```
 </details>
 
@@ -325,12 +325,12 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client nethermind --run execution 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client nethermind --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client prysm --execution-client nethermind --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client prysm --execution-client nethermind --run consensus 
   ```
 </details>
 
@@ -341,11 +341,11 @@ Run clients on holesky network
 
   Terminal 1:
   ```bash 
-  bash run-client.sh --network holesky --consensus-client teku --execution-client nethermind --run execution 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client nethermind --run execution 
   ```
 
   Terminal 2:
   ```bash
-  bash run-client.sh --network holesky --consensus-client teku --execution-client nethermind --run consensus 
+  bash run-a-client.sh --network holesky --consensus-client teku --execution-client nethermind --run consensus 
   ```
 </details>

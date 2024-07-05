@@ -1,4 +1,4 @@
-# run-client
+# run-a-client
 Ethereum client scripts to run clients, but with standardized options
 
 NOTE: This repository is in active development. Code can change drasticially,
@@ -10,7 +10,7 @@ Open two terminals and execute the following commands:
 
 Terminal 1:
 ```bash 
-bash run-client.sh --network <network> \
+bash run-a-client.sh --network <network> \
                    --consensus-client <consensus_client> \
                    --execution-client <execution_client> \
                    --run execution 
@@ -18,7 +18,7 @@ bash run-client.sh --network <network> \
 
 Terminal 2:
 ```bash
-bash run-client.sh --network <network> \
+bash run-a-client.sh --network <network> \
                    --consensus-client <consensus_client> \
                    --execution-client <execution_client> \
                    --run consensus 
@@ -29,7 +29,7 @@ bash run-client.sh --network <network> \
 This will run a node with selected network and clients. Note this is intended as examples. 
 
 ```
-bash run-node.sh --network <network> \
+bash run-a-node.sh --network <network> \
                    --consensus-client <consensus_client> \
                    --execution-client <execution_client>
 ```
