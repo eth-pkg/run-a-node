@@ -289,9 +289,7 @@ add_option "--log.dir.prefix" "$ERIGON_CLI_LOG_DIR_PREFIX"
 add_option "--log.dir.verbosity" "$ERIGON_CLI_LOG_DIR_VERBOSITY"
 add_option "--log.delays" "$ERIGON_CLI_LOG_DELAYS"
 add_option "--config" "$ERIGON_CLI_CONFIG"
-add_option "--help" "$ERIGON_CLI_HELP"
-add_option "--version" "$ERIGON_CLI_VERSION"
 
-echo "Using Options: $OPTIONS"
+echo "Using Options: erigon $OPTIONS"
 
 erigon $OPTIONS

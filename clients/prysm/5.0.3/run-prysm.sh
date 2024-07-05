@@ -216,6 +216,6 @@ append_option "--log-format" "$PRSYM_CLI_LOG_FORMAT"
 append_option "--interop-genesis-time" "$PRSYM_CLI_INTEROP_GENESIS_TIME"
 append_option "--interop-num-validators" "$PRSYM_CLI_INTEROP_NUM_VALIDATORS"
 
-echo "Using Options: $OPTIONS"
+echo "Using Options: beacon-chain $OPTIONS"
 
 beacon-chain $OPTIONS

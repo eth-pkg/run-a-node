@@ -16,6 +16,7 @@ declare -A LATEST_CLIENTS=(
     ["nethermind"]="1.26.0"
     ["nimbus-eth2"]="24.5.1"
     ["prysm"]="5.0.3"
+    ["reth"]="1.0.0"
     ["teku"]="24.4.0"
 )
 

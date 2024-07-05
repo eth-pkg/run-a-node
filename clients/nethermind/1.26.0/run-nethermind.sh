@@ -561,6 +561,6 @@ append_option "--TxPool.ReportMinutes" "$NETHERMIND_CLI_TX_POOL_REPORT_MINUTES"
 append_option "--TxPool.Size" "$NETHERMIND_CLI_TX_POOL_SIZE"
 append_option "--Wallet.DevAccounts" "$NETHERMIND_CLI_WALLET_DEV_ACCOUNTS"
 
-echo "Using Options: $OPTIONS"
+echo "Using Options: nethermind $OPTIONS"
 
 nethermind $OPTIONS
