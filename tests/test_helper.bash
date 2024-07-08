@@ -140,8 +140,8 @@ run_test() {
 
   sleep "$wait_time"
 
-  kill_process "$el_pid"
   kill_process "$cl_pid"
+  kill_process "$el_pid"
 
   # Assert
   cat "$el_output_log"
