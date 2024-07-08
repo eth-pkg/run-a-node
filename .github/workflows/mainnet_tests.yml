@@ -17,10 +17,10 @@ jobs:
       matrix:
         cl_name:
           - lighthouse
-          - lodestar
-          - nimbus-eth2
-          - prysm
-          - teku
+          # - lodestar
+          # - nimbus-eth2
+          # - prysm
+          # - teku
       fail-fast: false
     steps:
         - name: Checkout code
@@ -28,7 +28,7 @@ jobs:
         - name: Install java deps
           run: | 
             sudo apt remove --purge -y $(dpkg --list | grep openjdk | awk '{print $2}')
-            sudo apt remove openjdk-17-jdk openjdk-17-jre
+            sudo apt remove --purge -y openjdk-17-jdk openjdk-17-jre default-jre
             sudo apt-get autoremove --purge -y
             sudo apt-get clean
             sudo apt -y install wget curl
