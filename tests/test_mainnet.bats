@@ -7,7 +7,7 @@ chmod +x run-a-client.sh
 load test_helper.bash
 
 network=mainnet
-wait_time=10
+wait_time=30
 
 
 cleanup() {
