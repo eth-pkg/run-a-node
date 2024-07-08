@@ -182,6 +182,7 @@ jobs:
     
           - name: Run test
             run: | 
+              ls -al /usr/lib/eth-node-nethermind
               bats --show-output-of-passing-tests tests/test_mainnet.bats --filter nethermind-${{matrix.cl_name}} 
 
   reth:
