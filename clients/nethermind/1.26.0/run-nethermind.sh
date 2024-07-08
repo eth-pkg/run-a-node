@@ -563,4 +563,5 @@ append_option "--Wallet.DevAccounts" "$NETHERMIND_CLI_WALLET_DEV_ACCOUNTS"
 
 echo "Using Options: nethermind $OPTIONS"
 
-exec nethermind $OPTIONS
+# CI problem again, with cache
+exec /usr/lib/eth-node-nethermind/bin/Nethermind.Runner/release/nethermind $OPTIONS

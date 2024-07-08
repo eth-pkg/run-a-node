@@ -1,6 +1,5 @@
 name: Mainnet tests
 
-
 on:
   push:
     branches:
