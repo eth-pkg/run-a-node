@@ -27,6 +27,9 @@ jobs:
           uses: actions/checkout@v4
         - name: Install java deps
           run: | 
+            sudo apt-get remove --purge -y $(dpkg --list | grep openjdk | awk '{print $2}')
+            sudo apt-get autoremove --purge -y
+            sudo apt-get clean
             sudo apt -y install wget curl
             wget -q https://download.oracle.com/java/21/archive/jdk-21.0.2_linux-x64_bin.deb
             sudo apt install ./jdk-21.0.2_linux-x64_bin.deb
