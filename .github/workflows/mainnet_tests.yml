@@ -39,4 +39,4 @@ jobs:
             version: 1.0  
         - name: Run test
           run: | 
-            bats --show-output-of-passing-tests tests/test_mainnet.bats --filter besu-${matrix.cl_name}
+            bats --show-output-of-passing-tests tests/test_mainnet.bats --filter besu-${{matrix.cl_name}}
