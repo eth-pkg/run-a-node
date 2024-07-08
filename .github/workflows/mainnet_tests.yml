@@ -33,11 +33,8 @@ jobs:
             sudo apt -y install wget curl
             wget -q https://download.oracle.com/java/21/archive/jdk-21.0.2_linux-x64_bin.deb
             sudo apt install ./jdk-21.0.2_linux-x64_bin.deb
-            cat <<'EOF' | sudo tee /etc/profile.d/jdk.sh
-            export JAVA_HOME=/usr/lib/jvm/jdk-21/
-            export PATH=\$PATH:\$JAVA_HOME/bin
-            EOF
-
+            echo "export JAVA_HOME=/usr/lib/jvm/jdk-21/" | sudo tee /etc/profile.d/jdk.sh
+            echo 'export PATH=$PATH:$JAVA_HOME/bin' | sudo tee -a /etc/profile.d/jdk.sh
             source /etc/profile.d/jdk.sh
             sudo ln -s /usr/lib/jvm/jdk-21-oracle-x64 /usr/lib/jvm/jdk-21
             java -version
