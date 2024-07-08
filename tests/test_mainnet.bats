@@ -7,7 +7,10 @@ chmod +x run-a-client.sh
 load test_helper.bash
 
 network=mainnet
-wait_time=30
+wait_time=10
+prysm_wait_time=60
+teku_wait_time=90
+
 
 
 cleanup() {
@@ -46,14 +49,14 @@ trap cleanup EXIT INT SIGINT SIGTERM
   local el_name="besu"
   local cl_name="prysm"
 
-  run_test "$network" "$el_name" "$cl_name" 40
+  run_test "$network" "$el_name" "$cl_name" "$prysm_wait_time"
 }
 
 @test "$network: besu-teku" {
   local el_name="besu"
   local cl_name="teku"
 
-  run_test "$network" "$el_name" "$cl_name" 90
+  run_test "$network" "$el_name" "$cl_name" "$teku_wait_time"
 }
 
 # erigon tests
@@ -83,14 +86,14 @@ trap cleanup EXIT INT SIGINT SIGTERM
   local el_name="erigon"
   local cl_name="prysm"
 
-  run_test "$network" "$el_name" "$cl_name" 40
+  run_test "$network" "$el_name" "$cl_name" "$prysm_wait_time"
 }
 # TODO failing
 @test "$network: erigon-teku" {
   local el_name="erigon"
   local cl_name="teku"
 
-  run_test "$network" "$el_name" "$cl_name" 90
+  run_test "$network" "$el_name" "$cl_name" "$teku_wait_time"
 }
 
 ## geth
@@ -119,14 +122,14 @@ trap cleanup EXIT INT SIGINT SIGTERM
   local el_name="geth"
   local cl_name="prysm"
 
-  run_test "$network" "$el_name" "$cl_name" 40
+  run_test "$network" "$el_name" "$cl_name" "$prysm_wait_time"
 }
 
 @test "$network: geth-teku" {
   local el_name="geth"
   local cl_name="teku"
 
-  run_test "$network" "$el_name" "$cl_name" 90
+  run_test "$network" "$el_name" "$cl_name" "$teku_wait_time"
 }
 
 ## nethermind
@@ -155,14 +158,14 @@ trap cleanup EXIT INT SIGINT SIGTERM
   local el_name="nethermind"
   local cl_name="prysm"
 
-  run_test "$network" "$el_name" "$cl_name" 40
+  run_test "$network" "$el_name" "$cl_name" "$prysm_wait_time"
 }
 
 @test "$network: nethermind-teku" {
   local el_name="nethermind"
   local cl_name="teku"
 
-  run_test "$network" "$el_name" "$cl_name" 60
+  run_test "$network" "$el_name" "$cl_name" "$teku_wait_time"
 }
 
 ## reth
@@ -191,12 +194,12 @@ trap cleanup EXIT INT SIGINT SIGTERM
   local el_name="reth"
   local cl_name="prysm"
 
-  run_test "$network" "$el_name" "$cl_name" 40
+  run_test "$network" "$el_name" "$cl_name" "$prysm_wait_time"
 }
 
 @test "$network: reth-teku" {
   local el_name="reth"
   local cl_name="teku"
 
-  run_test "$network" "$el_name" "$cl_name" 90
+  run_test "$network" "$el_name" "$cl_name" "$teku_wait_time"
 }

@@ -3,15 +3,29 @@
 el_pid=
 cl_pid=
 
-kill_process(){
+kill_process() {
   local pid="$1"
-  local output 
+  local output
+  local attempt=1
+  local killed=false
 
-  if ps -p "$pid" > /dev/null 2>&1; then
-    output=$(kill "$pid"  2>&1 )
-    if [ "$?" != 0 ];then 
-      output=$(kill -9 "$pid"  2>&1 )
-    fi 
+  until [ $attempt -gt 9 ]; do
+    if ! ps -p "$pid" > /dev/null 2>&1; then
+      killed=true
+      break
+    fi
+
+    output=$(kill "$pid" 2>&1)
+    if [ "$?" == 0 ]; then
+      killed=true
+      break
+    fi
+
+    attempt=$((attempt + 1))
+  done
+
+  if [ "$killed" = false ]; then
+    output=$(kill -9 "$pid" 2>&1)
   fi
 }
 
@@ -95,7 +109,7 @@ check_cl_started() {
     elif [ "prysm" = "$cl_name" ]; then
       [[ "$cl_output" == *"Running on Ethereum Mainnet"* ]]
       # test assurance that el is connected
-      [[ "$cl_output" == *"Connected to new endpoint endpoint=http://localhost:8551"* ]]
+      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: mainnet"* ]]
       # test if can connect to el client
