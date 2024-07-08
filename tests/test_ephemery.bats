@@ -6,7 +6,7 @@ chmod +x run-a-client.sh
 
 load test_helper.bash
 
-network=mainnet
+network=ephemery
 wait_time=10
 el_pid=
 cl_pid=
