@@ -8,13 +8,10 @@ load test_helper.bash
 
 network=ephemery
 wait_time=10
-el_pid=
-cl_pid=
+
 
 cleanup() {
-  echo "Cleaning up background processes and logs..."
-  [ -n "$el_pid" ] && kill "$el_pid" || true
-  [ -n "$cl_pid" ] && kill "$cl_pid" || true
+  helper_cleanup
 }
 
 trap cleanup EXIT INT SIGINT SIGTERM

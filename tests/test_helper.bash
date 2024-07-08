@@ -1,5 +1,38 @@
 #!/usr/bin/env bash
 
+el_pid=
+cl_pid=
+
+kill_process(){
+  local pid="$1"
+  local output 
+
+  if ps -p "$pid" > /dev/null 2>&1; then
+    output=$(kill "$pid"  2>&1 )
+    if [ "$?" != 0 ];then 
+      output=$(kill -9 "$pid"  2>&1 )
+    fi 
+  fi
+}
+
+helper_cleanup() {
+  echo "Cleaning up background processes and logs..."
+  kill_process "$el_pid"
+  kill_process "$cl_pid"
+}
+
+kill_process_on_port(){
+  local port="$1"
+  local pid 
+
+  pid=$(lsof -ti :$port 2>&1 || true)
+
+  kill_process "$pid"
+}
+
+
+trap helper_cleanup EXIT INT SIGINT SIGTERM
+
 does_not_contain_error() {
   local message="$1"
   local lower_message
@@ -25,7 +58,7 @@ check_el_started() {
     elif [ "geth" = "$el_name" ]; then
       [[ "$el_output" == *"Starting Geth on Ethereum mainnet"* ]]
       [[ "$el_output" == *"Started P2P networking"* ]]
-    elif [ "nethermind" = "$el_name"]; then
+    elif [ "nethermind" = "$el_name" ]; then
       [[ "$el_output" == *"Chain ID     : Mainnet"* ]]
     elif [ "reth" = "$el_name" ]; then
       [[ "$el_output" == *"Consensus engine initialized"* ]]
@@ -61,7 +94,8 @@ check_cl_started() {
       [[ "$cl_output" == *"Starting beacon node"* ]]
     elif [ "prysm" = "$cl_name" ]; then
       [[ "$cl_output" == *"Running on Ethereum Mainnet"* ]]
-      [[ "$cl_output" == *"Starting initial chain sync"* ]]
+      # test assurance that el is connected
+      [[ "$cl_output" == *"Connected to new endpoint endpoint=http://localhost:8551"* ]]
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: mainnet"* ]]
       # test if can connect to el client
@@ -76,7 +110,9 @@ check_cl_started() {
   fi
 }
 
+
 run_test() {
+  # Arrange
   local network="$1"
   local el="$2"
   local cl="$3"
@@ -89,19 +125,25 @@ run_test() {
   # TODO shared data dir, this will need to be fixed 
   # tests should use a random dir
   rm -rf "$HOME/.run-a-node"
+  
+  # kill hanging processes on ports, from previous tests, if exists
+  # TODO should be coming from the config shared_port, el_discovery_port and cl_discovery_port
+  kill_process_on_port "8551"
+  kill_process_on_port "30303"
+  kill_process_on_port "9000"
 
-  bash run-a-client.sh --network "$network" --el "$el" &>"$el_output_log" &
+  # Act
+  nohup bash run-a-client.sh --network "$network" --el "$el"  >"$el_output_log" 2>&1 &
   el_pid=$!
-  bash run-a-client.sh --network "$network" --cl "$cl" &>"$cl_output_log" &
+  nohup bash run-a-client.sh --network "$network" --cl "$cl" >"$cl_output_log" 2>&1 &
   cl_pid=$!
 
   sleep "$wait_time"
 
-  kill "$el_pid" 2>/dev/null || echo "Failed to kill $el process with PID $el_pid"
+  kill_process "$el_pid"
+  kill_process "$cl_pid"
 
-  pkill -P "$cl_pid" 2>/dev/null || true  
-  kill "$cl_pid" 2>/dev/null || true  
-
+  # Assert
   check_el_started "$network" "$el_output_log" "$el_name"
   check_cl_started "$network" "$cl_output_log" "$cl_name"
 

@@ -8,13 +8,10 @@ load test_helper.bash
 
 network=mainnet
 wait_time=10
-el_pid=
-cl_pid=
+
 
 cleanup() {
-  echo "Cleaning up background processes and logs..."
-  [ -n "$el_pid" ] && kill "$el_pid" || true
-  [ -n "$cl_pid" ] && kill "$cl_pid" || true
+  helper_cleanup
 }
 
 trap cleanup EXIT INT SIGINT SIGTERM
@@ -81,13 +78,14 @@ trap cleanup EXIT INT SIGINT SIGTERM
   run_test "$network" "$el_name" "$cl_name" "$wait_time"
 }
 
+# TODO failing
 @test "$network: erigon-prysm" {
   local el_name="erigon"
   local cl_name="prysm"
 
   run_test "$network" "$el_name" "$cl_name" 40
 }
-
+# TODO failing
 @test "$network: erigon-teku" {
   local el_name="erigon"
   local cl_name="teku"
