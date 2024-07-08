@@ -144,6 +144,11 @@ run_test() {
   kill_process "$cl_pid"
 
   # Assert
+  cat "$el_output_log"
+  echo "---------------------END OF EL LOG----------------"
+  echo "---------------------END OF EL LOG----------------"
+  echo "---------------------END OF EL LOG----------------"
+  cat "$cl_output_log" 
   check_el_started "$network" "$el_output_log" "$el_name"
   check_cl_started "$network" "$cl_output_log" "$cl_name"
 
