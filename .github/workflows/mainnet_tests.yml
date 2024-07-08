@@ -17,10 +17,10 @@ jobs:
       matrix:
         cl_name:
           - lighthouse
-          # - lodestar
-          # - nimbus-eth2
-          # - prysm
-          # - teku
+          - lodestar
+          - nimbus-eth2
+          - prysm
+          - teku
       fail-fast: false
     steps:
         - name: Checkout code
