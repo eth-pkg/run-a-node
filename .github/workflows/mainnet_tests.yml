@@ -1,0 +1,42 @@
+name: Mainnet tests
+
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  besu:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        cl_name:
+          - lighthouse
+          - lodestar
+          - nimbus-eth2
+          - prysm
+          - teku
+      fail-fast: false
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: add eth-nodes repository
+          run: |
+            curl -fsSL https://packages.eth-pkg.com/keys/ethpkg-archive-keyring.asc -o /usr/share/keyrings/ethpkg-archive-keyring.asc
+            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ethpkg-archive-keyring.asc] http://packages.eth-pkg.com/noble-main noble main" |  tee -a /etc/apt/sources.list.d/ethpkg.list
+            apt update
+        - uses: awalsh128/cache-apt-pkgs-action@latest
+          with:
+            packages: |
+              eth-node-besu eth-node-erigon eth-node-geth eth-node-nethermind eth-node-reth \ 
+              eth-node-lighthouse eth-node-lodestar eth-node-nimbus-eth2 eth-node-prysm eth-node-teku \ 
+              bats
+            version: 1.0  
+        - name: Run test
+          run: | 
+            bats --show-output-of-passing-tests tests/test_mainnet.bats --filter besu-${matrix.cl_name}
