@@ -27,9 +27,9 @@ jobs:
           uses: actions/checkout@v4
         - name: add eth-nodes repository
           run: |
-            curl -fsSL https://packages.eth-pkg.com/keys/ethpkg-archive-keyring.asc -o /usr/share/keyrings/ethpkg-archive-keyring.asc
-            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ethpkg-archive-keyring.asc] http://packages.eth-pkg.com/noble-main noble main" |  tee -a /etc/apt/sources.list.d/ethpkg.list
-            apt update
+            sudo curl -fsSL https://packages.eth-pkg.com/keys/ethpkg-archive-keyring.asc -o /usr/share/keyrings/ethpkg-archive-keyring.asc
+            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ethpkg-archive-keyring.asc] http://packages.eth-pkg.com/noble-main noble main" | sudo tee -a /etc/apt/sources.list.d/ethpkg.list
+            sudo apt update
         - uses: awalsh128/cache-apt-pkgs-action@latest
           with:
             packages: |
