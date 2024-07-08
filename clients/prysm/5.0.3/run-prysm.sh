@@ -218,4 +218,5 @@ append_option "--interop-num-validators" "$PRSYM_CLI_INTEROP_NUM_VALIDATORS"
 
 echo "Using Options: beacon-chain $OPTIONS"
 
-exec beacon-chain $OPTIONS
+# on ci the postrm fails, so it not in path
+exec /usr/lib/eth-node-prysm/bin/beacon-chain $OPTIONS

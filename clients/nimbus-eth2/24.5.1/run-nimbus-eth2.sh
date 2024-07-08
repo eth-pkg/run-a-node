@@ -163,4 +163,5 @@ echo "Using Options: $OPTIONS"
 
 echo "Using Options: nimbus-eth2 $OPTIONS"
 
-exec nimbus_beacon_node $OPTIONS
+# on ci the postrm fails, so it not in path
+exec /usr/lib/eth-node-nimbus-eth2/bin/nimbus_beacon_node $OPTIONS
