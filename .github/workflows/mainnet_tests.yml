@@ -28,15 +28,15 @@ jobs:
         - name: Install java deps
           run: | 
             sudo apt -y install wget curl
-            wget https://download.oracle.com/java/21/archive/jdk-21.0.2_linux-x64_bin.deb
+            wget -q https://download.oracle.com/java/21/archive/jdk-21.0.2_linux-x64_bin.deb
             sudo apt install ./jdk-21.0.2_linux-x64_bin.deb
         - name: Install dotnet
           run: | 
-            wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+            wget -q https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
             sudo dpkg -i packages-microsoft-prod.deb
             rm packages-microsoft-prod.deb
             sudo apt update
-            sudo apt install -y aspnetcore-runtime-7.0
+            sudo apt install -y aspnetcore-runtime-8.0
         - name: Install node.js dep
           run: | 
             curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
