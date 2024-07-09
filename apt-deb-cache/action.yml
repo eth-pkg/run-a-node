@@ -40,9 +40,8 @@ runs:
           if [ ! -f ./deb-cache/$package-$version.deb ]; then
             echo "Cache miss for $package=$version. Downloading..."
             rm -f ./deb-cache/$package-*.deb
-            apt-get download $package=$version -y -qq --download-only -o=dir::cache=./deb-cache
-            ls ./deb-cache
-            mv ./deb-cache/$package*.deb ./deb-cache/$package-$version.deb
+            cd ./deb-cache
+            apt-get download $package=$version -y -qq --download-only 
           else
             echo "Cache hit for $package=$version. Using cached package."
           fi
