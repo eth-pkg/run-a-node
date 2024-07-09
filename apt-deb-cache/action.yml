@@ -9,6 +9,7 @@ runs:
   using: 'composite'
   steps:
     - name: Create deb-cache directory if not exists
+      shell: bash
       run: mkdir -p .deb-cache
 
     - name: Get package versions
@@ -30,6 +31,7 @@ runs:
           ${{ runner.os }}-deb-
 
     - name: Download packages if not cached
+      shell: bash
       run: |
         PACKAGE_LIST="${{ inputs.package-list }}"
         for package in $PACKAGE_LIST; do
@@ -44,6 +46,7 @@ runs:
         done
 
     - name: Install packages
+      shell: bash
       run: |
         sudo dpkg -i .deb-cache/*.deb || sudo apt-get install -f -y
 
