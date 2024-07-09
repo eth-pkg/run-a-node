@@ -157,7 +157,7 @@ jobs:
               sudo curl -fsSL https://packages.eth-pkg.com/keys/ethpkg-archive-keyring.asc -o /usr/share/keyrings/ethpkg-archive-keyring.asc
               echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ethpkg-archive-keyring.asc] http://packages.eth-pkg.com/noble-main noble main" | sudo tee -a /etc/apt/sources.list.d/ethpkg.list
               sudo apt update
-          - uses: eth-pkg/apt-deb-cache@latest
+          - uses: eth-pkg/apt-deb-cache@v0.1
             with:
               packages: |
                 eth-node-besu eth-node-erigon eth-node-geth eth-node-nethermind eth-node-reth \ 
