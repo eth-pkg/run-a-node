@@ -23,7 +23,7 @@ runs:
    
     # caches packages not to hit the repository in each CI run 
     - name: Cache apt packages
-      uses: eth-pkg/apt-deb-cache@v0.2.2
+      uses: eth-pkg/apt-deb-cache@v0.2.3
       with:
         packages: |
           eth-node-besu eth-node-erigon eth-node-geth eth-node-nethermind eth-node-reth \
