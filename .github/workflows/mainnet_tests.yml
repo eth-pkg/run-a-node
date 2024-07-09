@@ -157,14 +157,12 @@ jobs:
               sudo curl -fsSL https://packages.eth-pkg.com/keys/ethpkg-archive-keyring.asc -o /usr/share/keyrings/ethpkg-archive-keyring.asc
               echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ethpkg-archive-keyring.asc] http://packages.eth-pkg.com/noble-main noble main" | sudo tee -a /etc/apt/sources.list.d/ethpkg.list
               sudo apt update
-          - uses: awalsh128/cache-apt-pkgs-action@latest
+          - uses: Eeems-Org/apt-cache-action
             with:
               packages: |
                 eth-node-besu eth-node-erigon eth-node-geth eth-node-nethermind eth-node-reth \ 
                 eth-node-lighthouse eth-node-lodestar eth-node-nimbus-eth2 eth-node-prysm eth-node-teku \ 
                 bats nohup
-              version: 1.1 
-              execute_install_scripts: true 
           - name: Checkout code
             uses: actions/checkout@v4
           - uses: actions/setup-java@v4
@@ -183,8 +181,8 @@ jobs:
           - name: Run test
             run: | 
               ls -al /usr/lib/eth-node-nethermind
-              sudo apt install eth-node-nethermind 
-              ls -al /usr/lib/eth-node-nethermind
+              #sudo apt install eth-node-nethermind 
+              #ls -al /usr/lib/eth-node-nethermind
               bats --show-output-of-passing-tests tests/test_mainnet.bats --filter nethermind-${{matrix.cl_name}} 
 
   reth:
