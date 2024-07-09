@@ -39,3 +39,23 @@ The available options for both `run-a-client` and `run-a-node` scripts are:
 - `<network>`: ephemery, holesky, mainnet, sepolia, testnet
 - `<consensus_client>`: lighthouse, lodestar, nimbus-eth2, prsym, teku
 - `<execution_client>`: besu, erigon, geth, nethermind, reth
+
+
+## Running tests 
+
+
+```bash
+bats --show-output-of-passing-tests tests/test_<network>.bats
+```
+
+If you want to filter by client or client pair 
+
+```bash
+bats --show-output-of-passing-tests tests/test_<network>.bats --filter <client>
+```
+
+or by client pair 
+
+```bash
+bats --show-output-of-passing-tests tests/test_<network>.bats --filter <execution_client>-<consensus_client>
+```

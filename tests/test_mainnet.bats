@@ -9,7 +9,7 @@ load test_helper.bash
 network=mainnet
 wait_time=10
 prysm_wait_time=60
-teku_wait_time=90
+teku_wait_time=120
 
 
 
