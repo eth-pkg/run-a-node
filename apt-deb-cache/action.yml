@@ -2,8 +2,8 @@ name: 'Cache and Install Apt (.deb) Packages'
 description: 'A GitHub Action to cache and install .deb packages'
 author: 'eth-pkg'
 inputs:
-  package-list:
-    description: 'A space-separated list of ackages to install'
+  packages:
+    description: 'A space-separated list of packages to install'
     required: true
 runs:
   using: 'composite'
@@ -16,7 +16,7 @@ runs:
       shell: bash
       id: get-versions
       run: |
-        PACKAGE_LIST="${{ inputs.package-list }}"
+        PACKAGE_LIST="${{ inputs.packages }}"
         for package in $PACKAGE_LIST; do
           version=$(apt-cache policy $package | grep Candidate | awk '{print $2}')
           echo "$package=$version" >> package-versions.txt
@@ -34,7 +34,7 @@ runs:
     - name: Download packages if not cached
       shell: bash
       run: |
-        PACKAGE_LIST="${{ inputs.package-list }}"
+        PACKAGE_LIST="${{ inputs.packages }}"
         for package in $PACKAGE_LIST; do
           version=$(grep "^$package=" package-versions.txt | cut -d '=' -f 2)
           if [ ! -f .deb-cache/$package-$version.deb ]; then
