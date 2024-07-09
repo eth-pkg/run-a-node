@@ -8,6 +8,9 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Create deb-cache directory if not exists
       run: mkdir -p ./deb-cache
       shell: bash
@@ -15,7 +18,7 @@ runs:
     - name: Get package versions
       id: get-versions
       run: |
-        echo "${{ inputs.packages }}" | tr ' ' '\n' > package-list.txt
+        echo "${{ inputs.packages }}" | tr ' ' '\n' | sed 's/\\//g' | sed '/^$/d' > package-list.txt
         while IFS= read -r package; do
           version=$(apt-cache policy $package | grep Candidate | awk '{print $2}')
           echo "$package=$version" >> package-versions.txt
@@ -33,9 +36,9 @@ runs:
 
     - name: Download packages if not cached
       run: |
-        echo "${{ inputs.packages }}" | tr ' ' '\n' > package-list.txt
         while IFS= read -r package; do
           version=$(grep "^$package=" package-versions.txt | cut -d '=' -f 2)
+          # Remove previous versions if a new package is downloaded
           if [ ! -f ./deb-cache/$package-$version.deb ]; then
             echo "Cache miss for $package=$version. Downloading..."
             rm -f ./deb-cache/$package-*.deb
