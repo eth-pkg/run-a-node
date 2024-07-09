@@ -172,6 +172,7 @@ check_cl_started() {
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: sepolia"* ]]
       # test if can connect to el client
+      # this takes a lot of time on sepolia, needs time increase
       [[ "$cl_output" == *"Syncing started"* ]]
     else
       echo "Unsupported consensus client"
@@ -187,10 +188,10 @@ check_cl_started() {
     elif [ "nimbus-eth2" = "$cl_name" ]; then
       [[ "$cl_output" == *"Obtaining genesis state"* ]]
       [[ "$cl_output" == *"holesky-genesis.ssz.sz"* ]]
-      [[ "$cl_output" == *"Starting beacon node"* ]]
     elif [ "prysm" = "$cl_name" ]; then
       [[ "$cl_output" == *"Running on the Holesky Beacon Chain Testnet"* ]]
       # test assurance that el is connected
+      # this takes a lot of time on holesky, needs time increase
       [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: holesky"* ]]

@@ -8,8 +8,8 @@ load test_helper.bash
 
 network=holesky
 wait_time=10
-prysm_wait_time=60
-teku_wait_time=120
+prysm_wait_time=180
+teku_wait_time=180
 
 
 cleanup() {
