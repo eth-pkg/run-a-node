@@ -146,44 +146,17 @@ jobs:
         matrix:
           cl_name:
             - lighthouse
-            # - lodestar
-            # - nimbus-eth2
-            # - prysm
-            # - teku
+            - lodestar
+            - nimbus-eth2
+            - prysm
+            - teku
         fail-fast: false
       steps:
-          - name: add eth-nodes repository
-            run: |
-              sudo curl -fsSL https://packages.eth-pkg.com/keys/ethpkg-archive-keyring.asc -o /usr/share/keyrings/ethpkg-archive-keyring.asc
-              echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ethpkg-archive-keyring.asc] http://packages.eth-pkg.com/noble-main noble main" | sudo tee -a /etc/apt/sources.list.d/ethpkg.list
-              sudo apt update
-          - name: Checkout code
-            uses: actions/checkout@v4
-          - uses: ./apt-deb-cache
+          - uses: ./node-test
             with:
-              packages: |
-                eth-node-besu eth-node-erigon eth-node-geth eth-node-nethermind eth-node-reth \ 
-                eth-node-lighthouse eth-node-lodestar eth-node-nimbus-eth2 eth-node-prysm eth-node-teku \ 
-                bats  
-          - uses: actions/setup-java@v4
-            with:
-              distribution: 'oracle'
-              java-version: '21'
-          - name: Install dotnet
-            run: | 
-              sudo apt update
-              sudo apt install -y aspnetcore-runtime-8.0
-          - name: Install node.js dep
-            run: | 
-              curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-              sudo apt install -y nodejs
-    
-          - name: Run test
-            run: | 
-              ls -al /usr/lib/eth-node-nethermind
-              #sudo apt install eth-node-nethermind 
-              #ls -al /usr/lib/eth-node-nethermind
-              bats --show-output-of-passing-tests tests/test_mainnet.bats --filter nethermind-${{matrix.cl_name}} 
+              networK: mainnet
+              el_name: besu 
+              cl_name: ${{matrix.cl_name}}
 
   # reth:
   #     runs-on: ubuntu-24.04
