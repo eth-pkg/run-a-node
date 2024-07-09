@@ -13,6 +13,7 @@ runs:
       run: mkdir -p .deb-cache
 
     - name: Get package versions
+      shell: bash
       id: get-versions
       run: |
         PACKAGE_LIST="${{ inputs.package-list }}"
