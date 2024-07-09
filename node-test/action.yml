@@ -20,9 +20,7 @@ runs:
         sudo apt update
       shell: bash
 
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
+   
     # caches packages not to hit the repository in each CI run 
     - name: Cache apt packages
       uses: eth-pkg/apt-deb-cache@v0.2.0
