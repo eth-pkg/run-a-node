@@ -55,7 +55,13 @@ does_not_contain_error() {
 
 error_not_network() {
   local network="$1"
-  echo "Error: Network is not mainnet"
+  echo "Error: Network is not $network"
+  exit 1
+}
+
+error_engine_connection() {
+  local cl="$1"
+  echo "Error: Could not connect to execution client from $cl"
   exit 1
 }
 
@@ -81,7 +87,7 @@ check_el_started() {
       [[ "$el_output" == *"Chain ID     : Mainnet"* ]] || error_not_network "$network"
     elif [ "reth" = "$el_name" ]; then
       # TODO not sure how to know which chain
-      [[ "$el_output" == *"Consensus engine initialized"* ]]
+      [[ "$el_output" == *"Consensus engine initialized"* ]] 
     else
       echo "Unsupported execution client"
       exit 1
@@ -192,7 +198,7 @@ check_cl_started() {
     elif [ "prysm" = "$cl_name" ]; then
       [[ "$cl_output" == *"Running on Ethereum Mainnet"* ]] || error_not_network "$network"
       # test assurance that el is connected
-      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
+      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]] || error_engine_connection "$el"
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: mainnet"* ]] || error_not_network "$network"
       # test if can connect to el client
@@ -214,7 +220,7 @@ check_cl_started() {
     elif [ "prysm" = "$cl_name" ]; then
       [[ "$cl_output" == *"Running on the Sepolia Beacon Chain Testnet"* ]] || error_not_network "$network"
       # test assurance that el is connected
-      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
+      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]] || error_engine_connection "$el"
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: sepolia"* ]] || error_not_network "$network"
       # test if can connect to el client
@@ -238,7 +244,7 @@ check_cl_started() {
       [[ "$cl_output" == *"Running on the Holesky Beacon Chain Testnet"* ]] || error_not_network "$network"
       # test assurance that el is connected
       # this takes a lot of time on holesky, needs time increase
-      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
+      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]] || error_engine_connection "$el"
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: holesky"* ]] || error_not_network "$network"
       # test if can connect to el client
@@ -261,7 +267,7 @@ check_cl_started() {
       [[ "$cl_output" == *"Running on custom Ethereum network specified in a chain configuration yaml file"* ]]
       # test assurance that el is connected
       # this takes a lot of time on holesky, needs time increase
-      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
+      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]] || error_engine_connection "$el"
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: empty"* ]] || error_not_network "$network"
       # test if can connect to el client
@@ -284,7 +290,7 @@ check_cl_started() {
       [[ "$cl_output" == *"Running on custom Ethereum network specified in a chain configuration yaml file"* ]]
       # test assurance that el is connected
       # this takes a lot of time on holesky, needs time increase
-      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
+      [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]] || error_engine_connection "$el"
     elif [ "teku" = "$cl_name" ]; then
       [[ "$cl_output" == *"Configuration | Network: empty"* ]] || error_not_network "$network"
       # test if can connect to el client
@@ -321,9 +327,9 @@ run_test() {
   kill_process_on_port "9000"
 
   # Act
-  ./run-a-client.sh --network "$network" --el "$el" > "$el_output_log" &
+  ./run-a-client.sh --network "$network" --el "$el" > "$el_output_log" 2>&1 &
   el_pid=$!
-  ./run-a-client.sh --network "$network" --cl "$cl" > "$cl_output_log" &
+  ./run-a-client.sh --network "$network" --cl "$cl" > "$cl_output_log" 2>&1 &
   cl_pid=$!
 
   sleep "$wait_time"
@@ -331,9 +337,10 @@ run_test() {
   # fix lodestar hanging issue, while running the tests
   if [ "lodestar" = "$cl" ]; then 
     pkill -P "$cl_pid" >/dev/null 2>&1;
+  else 
+    kill_process "$cl_pid"
   fi 
 
-  kill_process "$cl_pid"
   kill_process "$el_pid"
 
   # Assert
