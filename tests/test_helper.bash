@@ -10,7 +10,7 @@ kill_process() {
   local killed=false
 
   until [ $attempt -gt 9 ]; do
-    if ! ps -p "$pid" > /dev/null 2>&1; then
+    if ! ps -p "$pid" >/dev/null 2>&1; then
       killed=true
       break
     fi
@@ -35,15 +35,14 @@ helper_cleanup() {
   kill_process "$cl_pid"
 }
 
-kill_process_on_port(){
+kill_process_on_port() {
   local port="$1"
-  local pid 
+  local pid
 
   pid=$(lsof -ti :$port 2>&1 || true)
 
   kill_process "$pid"
 }
-
 
 trap helper_cleanup EXIT INT SIGINT SIGTERM
 
@@ -52,6 +51,12 @@ does_not_contain_error() {
   local lower_message
   lower_message=$(echo "$message" | tr '[:upper:]' '[:lower:]')
   [[ "$lower_message" != *"error"* ]]
+}
+
+error_not_network() {
+  local network="$1"
+  echo "Error: Network is not mainnet"
+  exit 1
 }
 
 check_el_started() {
@@ -65,15 +70,15 @@ check_el_started() {
 
   if [ "mainnet" = "$network" ]; then
     if [ "besu" = "$el_name" ]; then
-      [[ "$el_output" == *"Network: Mainnet"* ]]
+      [[ "$el_output" == *"Network: Mainnet"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Ethereum main loop is up"* ]]
     elif [ "erigon" = "$el_name" ]; then
-      [[ "$el_output" == *"Initialising Ethereum protocol           network=1"* ]]
+      [[ "$el_output" == *"Initialising Ethereum protocol           network=1"* ]] || error_not_network "$network"
     elif [ "geth" = "$el_name" ]; then
-      [[ "$el_output" == *"Starting Geth on Ethereum mainnet"* ]]
+      [[ "$el_output" == *"Starting Geth on Ethereum mainnet"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Started P2P networking"* ]]
     elif [ "nethermind" = "$el_name" ]; then
-      [[ "$el_output" == *"Chain ID     : Mainnet"* ]]
+      [[ "$el_output" == *"Chain ID     : Mainnet"* ]] || error_not_network "$network"
     elif [ "reth" = "$el_name" ]; then
       # TODO not sure how to know which chain
       [[ "$el_output" == *"Consensus engine initialized"* ]]
@@ -83,81 +88,81 @@ check_el_started() {
     fi
   elif [ "sepolia" = "$network" ]; then
     if [ "besu" = "$el_name" ]; then
-      [[ "$el_output" == *"Network: Sepolia"* ]]
+      [[ "$el_output" == *"Network: Sepolia"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Ethereum main loop is up"* ]]
     elif [ "erigon" = "$el_name" ]; then
-      [[ "$el_output" == *"Initialising Ethereum protocol           network=11155111"* ]]
+      [[ "$el_output" == *"Initialising Ethereum protocol           network=11155111"* ]] || error_not_network "$network"
     elif [ "geth" = "$el_name" ]; then
-      [[ "$el_output" == *"Starting Geth on Sepolia testnet..."* ]]
+      [[ "$el_output" == *"Starting Geth on Sepolia testnet..."* ]] || error_not_network "$network"
       [[ "$el_output" == *"Started P2P networking"* ]]
     elif [ "nethermind" = "$el_name" ]; then
-      [[ "$el_output" == *"Chain ID     : Sepolia"* ]]
+      [[ "$el_output" == *"Chain ID     : Sepolia"* ]] || error_not_network "$network"
     elif [ "reth" = "$el_name" ]; then
       # TODO not sure how to know which chain
       [[ "$el_output" == *"Consensus engine initialized"* ]]
     else
       echo "Unsupported execution client"
       exit 1
-    fi  
+    fi
   elif [ "holesky" = "$network" ]; then
     if [ "besu" = "$el_name" ]; then
-      [[ "$el_output" == *"Network: Holesky"* ]]
+      [[ "$el_output" == *"Network: Holesky"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Ethereum main loop is up"* ]]
     elif [ "erigon" = "$el_name" ]; then
-      [[ "$el_output" == *"Initialising Ethereum protocol           network=17000"* ]]
+      [[ "$el_output" == *"Initialising Ethereum protocol           network=17000"* ]] || error_not_network "$network"
     elif [ "geth" = "$el_name" ]; then
-      [[ "$el_output" == *"Starting Geth on Holesky testnet..."* ]]
+      [[ "$el_output" == *"Starting Geth on Holesky testnet..."* ]] || error_not_network "$network"
       [[ "$el_output" == *"Started P2P networking"* ]]
     elif [ "nethermind" = "$el_name" ]; then
-      [[ "$el_output" == *"Chain ID     : Holesky"* ]]
+      [[ "$el_output" == *"Chain ID     : Holesky"* ]] || error_not_network "$network"
     elif [ "reth" = "$el_name" ]; then
       # TODO not sure how to know which chain
       [[ "$el_output" == *"Consensus engine initialized"* ]]
     else
       echo "Unsupported execution client"
       exit 1
-    fi  
+    fi
   elif [ "ephemery" = "$network" ]; then
     if [ "besu" = "$el_name" ]; then
       local user=$(whoami)
-      [[ "$el_output" == *"Network: Custom genesis file"* ]]
-      [[ "$el_output" == *"/home/$user/.run-a-node/ephemery/ephemery/besu.json"* ]]
+      [[ "$el_output" == *"Network: Custom genesis file"* ]] || error_not_network "$network"
+      [[ "$el_output" == *"/home/$user/.run-a-node/ephemery/ephemery/besu.json"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Ethereum main loop is up"* ]]
     elif [ "erigon" = "$el_name" ]; then
-      [[ "$el_output" == *"Initialising Ethereum protocol           network=39438111"* ]]
+      [[ "$el_output" == *"Initialising Ethereum protocol           network=39438111"* ]] || error_not_network "$network"
     elif [ "geth" = "$el_name" ]; then
-      [[ "$el_output" == *"Initialising Ethereum protocol           network=39,438,111"* ]]
+      [[ "$el_output" == *"Initialising Ethereum protocol           network=39,438,111"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Started P2P networking"* ]]
     elif [ "nethermind" = "$el_name" ]; then
-      [[ "$el_output" == *"Chain ID     : 39438111"* ]]
+      [[ "$el_output" == *"Chain ID     : 39438111"* ]] || error_not_network "$network"
     elif [ "reth" = "$el_name" ]; then
       # TODO not sure how to know which chain
       [[ "$el_output" == *"Consensus engine initialized"* ]]
     else
       echo "Unsupported execution client"
       exit 1
-    fi 
+    fi
   elif [ "testnet" = "$network" ]; then
     if [ "besu" = "$el_name" ]; then
       local user=$(whoami)
-      [[ "$el_output" == *"Network: Custom genesis file"* ]]
-      [[ "$el_output" == *"/home/$user/.run-a-node/testnet/testnet/besu.json"* ]]
+      [[ "$el_output" == *"Network: Custom genesis file"* ]] || error_not_network "$network"
+      [[ "$el_output" == *"/home/$user/.run-a-node/testnet/testnet/besu.json"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Ethereum main loop is up"* ]]
     elif [ "erigon" = "$el_name" ]; then
       # TODO this actually does not work
-      [[ "$el_output" == *"Initialising Ethereum protocol           network=1337"* ]]
+      [[ "$el_output" == *"Initialising Ethereum protocol           network=1337"* ]] || error_not_network "$network"
     elif [ "geth" = "$el_name" ]; then
-      [[ "$el_output" == *"Initialising Ethereum protocol           network=1377"* ]]
+      [[ "$el_output" == *"Initialising Ethereum protocol           network=1377"* ]] || error_not_network "$network"
       [[ "$el_output" == *"Started P2P networking"* ]]
     elif [ "nethermind" = "$el_name" ]; then
-      [[ "$el_output" == *"Chain ID     : DefaultGethPrivateChain"* ]]
+      [[ "$el_output" == *"Chain ID     : DefaultGethPrivateChain"* ]] || error_not_network "$network"
     elif [ "reth" = "$el_name" ]; then
       # TODO not sure how to know which chain
       [[ "$el_output" == *"Consensus engine initialized"* ]]
     else
       echo "Unsupported execution client"
       exit 1
-    fi          
+    fi
   else
     echo "EL tests are not implemented for network: $network"
     exit 1
@@ -176,20 +181,20 @@ check_cl_started() {
 
   if [ "mainnet" = "$network" ]; then
     if [ "lighthouse" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configured for network                  name: mainnet"* ]]
+      [[ "$cl_output" == *"Configured for network                  name: mainnet"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Starting checkpoint sync"* ]]
     elif [ "lodestar" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Lodestar network=mainnet"* ]]
+      [[ "$cl_output" == *"Lodestar network=mainnet"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Fetching checkpoint state"* ]]
     elif [ "nimbus-eth2" = "$cl_name" ]; then
-      [[ "$cl_output" == *"const_preset=mainnet"* ]]
+      [[ "$cl_output" == *"const_preset=mainnet"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Starting beacon node"* ]]
     elif [ "prysm" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Running on Ethereum Mainnet"* ]]
+      [[ "$cl_output" == *"Running on Ethereum Mainnet"* ]] || error_not_network "$network"
       # test assurance that el is connected
       [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
     elif [ "teku" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configuration | Network: mainnet"* ]]
+      [[ "$cl_output" == *"Configuration | Network: mainnet"* ]] || error_not_network "$network"
       # test if can connect to el client
       [[ "$cl_output" == *"Syncing started"* ]]
     else
@@ -198,20 +203,20 @@ check_cl_started() {
     fi
   elif [ "sepolia" = "$network" ]; then
     if [ "lighthouse" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configured for network                  name: sepolia"* ]]
+      [[ "$cl_output" == *"Configured for network                  name: sepolia"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Starting checkpoint sync"* ]]
     elif [ "lodestar" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Lodestar network=sepolia"* ]]
+      [[ "$cl_output" == *"Lodestar network=sepolia"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Fetching checkpoint state"* ]]
     elif [ "nimbus-eth2" = "$cl_name" ]; then
-      [[ "$cl_output" == *"eth2Network: some(\\\"sepolia\\\")"* ]]
+      [[ "$cl_output" == *"eth2Network: some(\\\"sepolia\\\")"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Starting beacon node"* ]]
     elif [ "prysm" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Running on the Sepolia Beacon Chain Testnet"* ]]
+      [[ "$cl_output" == *"Running on the Sepolia Beacon Chain Testnet"* ]] || error_not_network "$network"
       # test assurance that el is connected
       [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
     elif [ "teku" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configuration | Network: sepolia"* ]]
+      [[ "$cl_output" == *"Configuration | Network: sepolia"* ]] || error_not_network "$network"
       # test if can connect to el client
       # this takes a lot of time on sepolia, needs time increase
       [[ "$cl_output" == *"Syncing started"* ]]
@@ -221,79 +226,78 @@ check_cl_started() {
     fi
   elif [ "holesky" = "$network" ]; then
     if [ "lighthouse" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configured for network                  name: holesky"* ]]
+      [[ "$cl_output" == *"Configured for network                  name: holesky"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Starting checkpoint sync"* ]]
     elif [ "lodestar" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Lodestar network=holesky"* ]]
+      [[ "$cl_output" == *"Lodestar network=holesky"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Fetching checkpoint state"* ]]
     elif [ "nimbus-eth2" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Obtaining genesis state"* ]]
+      [[ "$cl_output" == *"Obtaining genesis state"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"holesky-genesis.ssz.sz"* ]]
     elif [ "prysm" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Running on the Holesky Beacon Chain Testnet"* ]]
+      [[ "$cl_output" == *"Running on the Holesky Beacon Chain Testnet"* ]] || error_not_network "$network"
       # test assurance that el is connected
       # this takes a lot of time on holesky, needs time increase
       [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
     elif [ "teku" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configuration | Network: holesky"* ]]
+      [[ "$cl_output" == *"Configuration | Network: holesky"* ]] || error_not_network "$network"
       # test if can connect to el client
       [[ "$cl_output" == *"Syncing started"* ]]
     else
       echo "Unsupported consensus client"
       exit 1
-    fi  
+    fi
   elif [ "ephemery" = "$network" ]; then
     if [ "lighthouse" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configured for network                  name: custom"* ]]
+      [[ "$cl_output" == *"Configured for network                  name: custom"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Starting checkpoint sync"* ]]
     elif [ "lodestar" = "$cl_name" ]; then
       [[ "$cl_output" == *"network=testnet"* ]]
       [[ "$cl_output" == *"Fetching checkpoint state"* ]]
     elif [ "nimbus-eth2" = "$cl_name" ]; then
       local user = $(whoami)
-      [[ "$cl_output" == *"eth2Network: some(\\\"/home/$user/.run-a-node/ephemery/ephemery\\\")"* ]]
+      [[ "$cl_output" == *"eth2Network: some(\\\"/home/$user/.run-a-node/ephemery/ephemery\\\")"* ]] || error_not_network "$network"
     elif [ "prysm" = "$cl_name" ]; then
       [[ "$cl_output" == *"Running on custom Ethereum network specified in a chain configuration yaml file"* ]]
       # test assurance that el is connected
       # this takes a lot of time on holesky, needs time increase
       [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
     elif [ "teku" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configuration | Network: empty"* ]]
+      [[ "$cl_output" == *"Configuration | Network: empty"* ]] || error_not_network "$network"
       # test if can connect to el client
       [[ "$cl_output" == *"Syncing started"* ]]
     else
       echo "Unsupported consensus client"
       exit 1
-    fi 
+    fi
   elif [ "testnet" = "$network" ]; then
     if [ "lighthouse" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configured for network                  name: custom"* ]]
+      [[ "$cl_output" == *"Configured for network                  name: custom"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Starting checkpoint sync"* ]]
     elif [ "lodestar" = "$cl_name" ]; then
-      [[ "$cl_output" == *"network=testnet"* ]]
+      [[ "$cl_output" == *"network=testnet"* ]] || error_not_network "$network"
       [[ "$cl_output" == *"Fetching checkpoint state"* ]]
     elif [ "nimbus-eth2" = "$cl_name" ]; then
       local user = $(whoami)
-      [[ "$cl_output" == *"eth2Network: some(\\\"/home/$user/.run-a-node/testnet/testnet\\\")"* ]]
+      [[ "$cl_output" == *"eth2Network: some(\\\"/home/$user/.run-a-node/testnet/testnet\\\")"* ]] || error_not_network "$network"
     elif [ "prysm" = "$cl_name" ]; then
       [[ "$cl_output" == *"Running on custom Ethereum network specified in a chain configuration yaml file"* ]]
       # test assurance that el is connected
       # this takes a lot of time on holesky, needs time increase
       [[ "$cl_output" == *"\"Connected to new endpoint\" endpoint=\"http://localhost:8551\""* ]]
     elif [ "teku" = "$cl_name" ]; then
-      [[ "$cl_output" == *"Configuration | Network: empty"* ]]
+      [[ "$cl_output" == *"Configuration | Network: empty"* ]] || error_not_network "$network"
       # test if can connect to el client
       [[ "$cl_output" == *"Syncing started"* ]]
     else
       echo "Unsupported consensus client"
       exit 1
-    fi     
+    fi
   else
     echo "CL tests are not implemented for network: $network"
     exit 1
   fi
 }
-
 
 run_test() {
   # Arrange
@@ -306,10 +310,10 @@ run_test() {
   el_output_log=$(mktemp)
   cl_output_log=$(mktemp)
 
-  # TODO shared data dir, this will need to be fixed 
+  # TODO shared data dir, this will need to be fixed
   # tests should use a random dir
   rm -rf "$HOME/.run-a-node"
-  
+
   # kill hanging processes on ports, from previous tests, if exists
   # TODO should be coming from the config shared_port, el_discovery_port and cl_discovery_port
   kill_process_on_port "8551"
@@ -317,12 +321,17 @@ run_test() {
   kill_process_on_port "9000"
 
   # Act
-  nohup bash run-a-client.sh --network "$network" --el "$el"  >"$el_output_log" 2>&1 &
+  ./run-a-client.sh --network "$network" --el "$el" > "$el_output_log" &
   el_pid=$!
-  nohup bash run-a-client.sh --network "$network" --cl "$cl" >"$cl_output_log" 2>&1 &
+  ./run-a-client.sh --network "$network" --cl "$cl" > "$cl_output_log" &
   cl_pid=$!
 
   sleep "$wait_time"
+
+  # fix lodestar hanging issue, while running the tests
+  if [ "lodestar" = "$cl" ]; then 
+    pkill -P "$cl_pid" >/dev/null 2>&1;
+  fi 
 
   kill_process "$cl_pid"
   kill_process "$el_pid"
@@ -332,7 +341,7 @@ run_test() {
   # echo "---------------------END OF EL LOG----------------"
   # echo "---------------------END OF EL LOG----------------"
   # echo "---------------------END OF EL LOG----------------"
-  # cat "$cl_output_log" 
+  # cat "$cl_output_log"
   check_el_started "$network" "$el_output_log" "$el_name"
   check_cl_started "$network" "$cl_output_log" "$cl_name"
 

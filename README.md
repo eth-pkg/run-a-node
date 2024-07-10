@@ -10,6 +10,14 @@ This repository was created as a result of the `eth-nodes` Debian packaging proj
 
 **NOTE:** This repository is under active development. The code can change drastically, and bugs should be expected.
 
+## Tests 
+
+[![mainnet](https://github.com/eth-pkg/run-a-node/actions/workflows/mainnet_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/mainnet_tests.yml)
+[![ephemery](https://github.com/eth-pkg/run-a-node/actions/workflows/ephemery_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/ephemery_tests.yml)
+[![holesky](https://github.com/eth-pkg/run-a-node/actions/workflows/holesky_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/holesky_tests.yml)
+[![sepolia](https://github.com/eth-pkg/run-a-node/actions/workflows/sepolia_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/sepolia_tests.yml)
+[![testnet](https://github.com/eth-pkg/run-a-node/actions/workflows/testnet_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/testnet_tests.yml)
+
 ## Running a Client Pair
 
 Open two terminals and execute the following commands:

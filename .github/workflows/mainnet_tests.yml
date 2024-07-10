@@ -1,4 +1,4 @@
-name: Mainnet tests
+name: mainnet tests
 
 on:
   push:
