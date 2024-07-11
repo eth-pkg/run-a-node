@@ -246,14 +246,15 @@ run_test() {
   fi
 
   if [ "false" = "$el_sync_status" ]; then
-    :
+    echo "el is not syncing"
+    exit 1
   else
 
     starting_block=$(echo $el_sync_status | jq .startingBlock)
     current_block=$(echo $el_sync_status | jq .currentBlock)
 
-    [ "$starting_block" = "$current_block" ] || {
-      echo "el is syncing not respecting consensus client"
+    [ "$starting_block" != "$current_block" ] || {
+      echo "el is not syncing"
       exit 1
     }
   fi

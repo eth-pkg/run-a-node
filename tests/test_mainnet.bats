@@ -14,11 +14,11 @@ nimbus_eth2_wait_time=20 # starts before initial checkpoint sync
 prysm_wait_time=60      # had to increase time as the el_offline takes time
 teku_wait_time=30
 
-besu_wait_time=10 # for sync status, but besu api starts in 10s
+besu_wait_time=360 # for sync status, but besu api starts in 10s
 erigon_wait_time=420 # yup, it is downloading snapshots on mainnet, which is very slow ...
-geth_wait_time=10
-nethermind_wait_time=10
-reth_wait_time=10 
+geth_wait_time=360
+nethermind_wait_time=360
+reth_wait_time=360
 
 cleanup() {
   helper_cleanup
