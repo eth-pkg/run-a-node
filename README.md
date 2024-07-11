@@ -1,5 +1,12 @@
 # run-a-node
 
+[![mainnet](https://github.com/eth-pkg/run-a-node/actions/workflows/mainnet_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/mainnet_tests.yml)
+[![holesky](https://github.com/eth-pkg/run-a-node/actions/workflows/holesky_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/holesky_tests.yml)
+[![sepolia](https://github.com/eth-pkg/run-a-node/actions/workflows/sepolia_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/sepolia_tests.yml)
+
+[![testnet](https://github.com/eth-pkg/run-a-node/actions/workflows/testnet_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/testnet_tests.yml)
+[![ephemery](https://github.com/eth-pkg/run-a-node/actions/workflows/ephemery_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/ephemery_tests.yml)
+
 This repository features two main components: the `run-a-node` top-level node running script and the `run-a-client` standardized script. The `run-a-client` script is designed to run each client uniformly, respecting each client's unique options while providing a minimal abstraction layer. This allows users to easily run clients without delving into detailed configurations until they are ready to modify specific config values.
 
 Options are moved into configuration files, which are provided through CLI variables, ensuring a consistent format for each client. However, specific client configuration files can still be used if needed.
@@ -10,13 +17,6 @@ This repository was created as a result of the `eth-nodes` Debian packaging proj
 
 **NOTE:** This repository is under active development. The code can change drastically, and bugs should be expected.
 
-## Tests 
-
-[![mainnet](https://github.com/eth-pkg/run-a-node/actions/workflows/mainnet_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/mainnet_tests.yml)
-[![ephemery](https://github.com/eth-pkg/run-a-node/actions/workflows/ephemery_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/ephemery_tests.yml)
-[![holesky](https://github.com/eth-pkg/run-a-node/actions/workflows/holesky_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/holesky_tests.yml)
-[![sepolia](https://github.com/eth-pkg/run-a-node/actions/workflows/sepolia_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/sepolia_tests.yml)
-[![testnet](https://github.com/eth-pkg/run-a-node/actions/workflows/testnet_tests.yml/badge.svg)](https://github.com/eth-pkg/run-a-node/actions/workflows/testnet_tests.yml)
 
 ## Running a Client Pair
 
