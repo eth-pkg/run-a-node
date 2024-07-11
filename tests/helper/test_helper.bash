@@ -125,11 +125,12 @@ get_chain_id_for_network() {
   if [ "mainnet" = "$network" ]; then
     echo 1
   elif [ "sepolia" = "$network" ]; then
-    echo 2
+    echo 11155111
   elif [ "holesky" = "$network" ]; then
-    echo 3
+    echo 17000
   elif [ "ephemery" = "$network" ]; then
-    echo 4
+    local network_id=$(cat $HOME/.run-a-node/ephemery/ephemery/genesis.json | grep chainId | tr -d ',' | sed 's/"chainId"://g' | tr -d '[:space:]')
+    echo $network_id
   elif [ "testnet" = "$network" ]; then
     echo 1337
   else
@@ -245,7 +246,7 @@ run_test() {
     }
   fi
 
-  # TODO disable this, not sure what the status should be 
+  # TODO disable this, not sure what the status should be
   # if [ "false" = "$el_sync_status" ]; then
   #   echo "el is not syncing"
   #   exit 1
