@@ -50,13 +50,6 @@ kill_process_on_port() {
 
 trap helper_cleanup EXIT INT SIGINT SIGTERM
 
-does_not_contain_error() {
-  local message="$1"
-  local lower_message
-  lower_message=$(echo "$message" | tr '[:upper:]' '[:lower:]')
-  [[ "$lower_message" != *"error"* ]]
-}
-
 call_rpc_api() {
   local url=$1
   local payload=$2
@@ -83,7 +76,7 @@ call_json_api() {
   if echo "$response" | grep -q '"data"'; then
     echo "$response"
   else
-    echo "consensus client is offline or unreachable." >&2
+    echo "client is offline or unreachable." >&2
     exit 1
   fi
 }
@@ -113,16 +106,17 @@ get_chain_id_on_beacon_chain() {
   echo $chain_id
 }
 
-get_syncing() {
+get_el_syncing() {
   local url=$1
-  local response=$(call_json_api $url $payload)
+  local payload='{"jsonrpc":"2.0","method":"eth_syncing","params":[],"id":0}'
+  local response=$(call_rpc_api $url $payload)
   local status=$?
   if [ $status -ne 0 ]; then
     exit $status
   fi
   echo "$response" >&2
-  local chain_id=$(echo $response | jq '.result' | sed 's/"//g')
-  echo $chain_id
+  local result=$(echo $response | jq '.result')
+  echo $result
 }
 
 get_chain_id_for_network() {
@@ -173,7 +167,7 @@ run_test() {
   local output_log_el output_log_cl
   local expected_chain_id=$(get_chain_id_for_network $network)
   local chain_id_cl chain_id_el
-  local cl_sync_status el_offline cl_is_syncing
+  local cl_sync_status el_offline cl_is_syncing el_sync_status cl_is_optimistic
 
   output_log_cl=$(mktemp)
   output_log_el=$(mktemp)
@@ -202,6 +196,8 @@ run_test() {
   chain_id_cl=$(get_chain_id_on_beacon_chain "http://localhost:5052" || true)
   cl_sync_status=$(call_json_api "http://localhost:5052/eth/v1/node/syncing" || true)
   echo "response: $cl_sync_status" >&2
+  el_sync_status=$(get_el_syncing "http://localhost:8545" || true)
+  echo "response: $el_sync_status" >&2
 
   kill_process "$el_pid"
 
@@ -226,19 +222,38 @@ run_test() {
   }
   el_offline=$(echo $cl_sync_status | jq .data.el_offline)
   cl_is_syncing=$(echo $cl_sync_status | jq .data.is_syncing)
-  [ "false" == "$cl_is_syncing" ] || {
+  cl_is_optimistic=$(echo $cl_sync_status | jq .data.is_optimistic)
+
+  if [ "$cl_is_syncing" = "true" ]; then
+    :
+  elif [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
+    :
+  else
     echo "Consensus client is not syncing"
     exit 1
-  }
+  fi
   if [ "prysm" = "$cl" ]; then
     # BUG with prysm until version 5.0.4
-    [ "true" == "$el_offline" ] || {
+    [ "true" = "$el_offline" ] || {
       echo "el is offline"
       exit 1
     }
   else
-    [ "false" == "$el_offline" ] || {
+    [ "false" = "$el_offline" ] || {
       echo "el is offline"
+      exit 1
+    }
+  fi
+
+  if [ "false" = "$el_sync_status" ]; then
+    :
+  else
+
+    starting_block=$(echo $el_sync_status | jq .startingBlock)
+    current_block=$(echo $el_sync_status | jq .currentBlock)
+
+    [ "$starting_block" = "$current_block" ] || {
+      echo "el is syncing not respecting consensus client"
       exit 1
     }
   fi
