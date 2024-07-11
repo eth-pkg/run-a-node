@@ -56,14 +56,14 @@ The available options for both `run-a-client` and `run-a-node` scripts are:
 bats --show-output-of-passing-tests tests/test_<network>.bats
 ```
 
-If you want to filter by client or client pair 
+If you want to filter by client or client pair, (timeout is based on how slow or fast your internet download speed)
 
 ```bash
-bats --show-output-of-passing-tests tests/test_<network>.bats --filter <client>
+timeout 10m bats --show-output-of-passing-tests tests/test_<network>.bats --filter <client>
 ```
 
 or by client pair 
 
 ```bash
-bats --show-output-of-passing-tests tests/test_<network>.bats --filter <execution_client>-<consensus_client>
+timeout 25m bats --show-output-of-passing-tests tests/test_<network>.bats --filter <execution_client>-<consensus_client>
 ```
