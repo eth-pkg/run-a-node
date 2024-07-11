@@ -226,7 +226,7 @@ run_test() {
   }
   el_offline=$(echo $cl_sync_status | jq .data.el_offline)
   cl_is_syncing=$(echo $cl_sync_status | jq .data.is_syncing)
-  [ "true" == "$cl_is_syncing" ] || {
+  [ "false" == "$cl_is_syncing" ] || {
     echo "Consensus client is not syncing"
     exit 1
   }

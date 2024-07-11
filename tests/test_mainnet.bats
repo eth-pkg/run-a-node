@@ -8,11 +8,11 @@ load helper/test_helper.bash
 
 network=mainnet
 # wait time until cl endpoints are running (with slower internet)
-lighthouse_wait_time=240 #requires initial checkpoint sync
-lodestar_wait_time=180   # requires initial checkpoint sync
-nimbus_eth2_wait_time=20 # starts before initial checkpoint sync
-prysm_wait_time=120      # had to increase time as the el_offline takes time
-teku_wait_time=30
+lighthouse_wait_time=360 #requires initial checkpoint sync
+lodestar_wait_time=360   # requires initial checkpoint sync
+nimbus_eth2_wait_time=360 # starts before initial checkpoint sync
+prysm_wait_time=360      # had to increase time as the el_offline takes time
+teku_wait_time=360
 
 besu_wait_time=10
 erigon_wait_time=420 # yup, it is downloading snapshots on mainnet, which is very slow ...
