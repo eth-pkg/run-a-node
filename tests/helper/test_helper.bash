@@ -90,8 +90,8 @@ get_chain_id_on_eth1() {
     exit $status
   fi
   echo "response: $response" >&2
-  local chain_id=$(echo $response | jq '.result' | sed 's/0x//g' | sed 's/"//g')
-  echo $chain_id
+  local chain_id=$(echo $response | jq '.result' | sed 's/"//g')
+  printf "%d" $chain_id
 }
 
 get_chain_id_on_beacon_chain() {
@@ -125,9 +125,9 @@ get_chain_id_for_network() {
   if [ "mainnet" = "$network" ]; then
     echo 1
   elif [ "sepolia" = "$network" ]; then
-    echo aa36a7 # use hex stripped id, TODO fix it later on
+    echo 11155111 # use hex stripped id, TODO fix it later on
   elif [ "holesky" = "$network" ]; then
-    echo 4268
+    echo 17000
   elif [ "ephemery" = "$network" ]; then
     local network_id=$(cat $HOME/.run-a-node/ephemery/ephemery/genesis.json | grep chainId | tr -d ',' | sed 's/"chainId"://g' | tr -d '[:space:]')
     echo $network_id
