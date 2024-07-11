@@ -127,7 +127,7 @@ get_chain_id_for_network() {
   elif [ "sepolia" = "$network" ]; then
     echo 11155111
   elif [ "holesky" = "$network" ]; then
-    echo 17000
+    echo 4268
   elif [ "ephemery" = "$network" ]; then
     local network_id=$(cat $HOME/.run-a-node/ephemery/ephemery/genesis.json | grep chainId | tr -d ',' | sed 's/"chainId"://g' | tr -d '[:space:]')
     echo $network_id
