@@ -125,7 +125,7 @@ get_chain_id_for_network() {
   if [ "mainnet" = "$network" ]; then
     echo 1
   elif [ "sepolia" = "$network" ]; then
-    echo 11155111
+    echo aa36a7 # use hex stripped id, TODO fix it later on
   elif [ "holesky" = "$network" ]; then
     echo 4268
   elif [ "ephemery" = "$network" ]; then
