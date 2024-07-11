@@ -59,7 +59,7 @@ bats --show-output-of-passing-tests tests/test_<network>.bats
 If you want to filter by client or client pair, (timeout is based on how slow or fast your internet download speed)
 
 ```bash
-timeout 10m bats --show-output-of-passing-tests tests/test_<network>.bats --filter <client>
+timeout 11m bats --show-output-of-passing-tests tests/test_<network>.bats --filter <client>
 ```
 
 or by client pair 

@@ -51,6 +51,6 @@ runs:
     - name: Run test
       run: | 
         # timeout in 10m if client is offline, the tests is stuck, this is a workaround of that
-        timeout 10m bats --show-output-of-passing-tests tests/test_${{inputs.network}}.bats --filter ${{ inputs.el_name }}-${{ inputs.cl_name }}
+        timeout 11m bats --show-output-of-passing-tests tests/test_${{inputs.network}}.bats --filter ${{ inputs.el_name }}-${{ inputs.cl_name }}
       shell: bash
 
