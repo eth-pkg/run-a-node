@@ -227,8 +227,8 @@ run_test() {
 
   if [ "$cl_is_syncing" = "true" ]; then
     :
-  elif [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
-    :
+  # elif [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
+  #   :
   else
     echo "Consensus client is not syncing"
     exit 1

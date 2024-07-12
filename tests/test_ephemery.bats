@@ -14,11 +14,11 @@ nimbus_eth2_wait_time=20 # starts before initial checkpoint sync
 prysm_wait_time=60      # had to increase time as the el_offline takes time
 teku_wait_time=30
 
-besu_wait_time=420 # 
-erigon_wait_time=420 #
-geth_wait_time=420
-nethermind_wait_time=420
-reth_wait_time=420
+besu_wait_time=120 # 
+erigon_wait_time=60 #
+geth_wait_time=60
+nethermind_wait_time=60
+reth_wait_time=60
 
 cleanup() {
   helper_cleanup
