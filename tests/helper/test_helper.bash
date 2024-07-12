@@ -225,12 +225,12 @@ run_test() {
   cl_is_syncing=$(echo $cl_sync_status | jq .data.is_syncing)
   cl_is_optimistic=$(echo $cl_sync_status | jq .data.is_optimistic)
 
-  if [ "$cl_is_syncing" = "true" ]; then
-    :
-  # elif [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
+  # if [ "$cl_is_syncing" = "true" ]; then
   #   :
+  if [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
+    :
   else
-    echo "Consensus client is not syncing"
+    echo "Consensus client is not using checkpoint sync" # we are testing for checkpoint sync in this case
     exit 1
   fi
   if [ "prysm" = "$cl" ]; then
@@ -246,10 +246,10 @@ run_test() {
     }
   fi
 
-  # TODO disable this, not sure what the status should be
-  # if [ "false" = "$el_sync_status" ]; then
-  #   echo "el is not syncing"
-  #   exit 1
-  # fi
+  # on mainnet after CL sync (checkpoint sync), the client should be syncing (mainnet, sepolia, holesky)
+  if [ "false" = "$el_sync_status" ]; then
+    echo "el is not syncing"
+    exit 1
+  fi
   # TODO el sync status
 }
