@@ -159,6 +159,40 @@ error_not_network() {
   exit 1
 }
 
+test_checkpoint_sync() {
+  local cl_sync_status=$1
+  local el_sync_status=$2
+  local cl=$3
+  local el_offline=$(echo $cl_sync_status | jq .data.el_offline)
+  local cl_is_syncing=$(echo $cl_sync_status | jq .data.is_syncing)
+  local cl_is_optimistic=$(echo $cl_sync_status | jq .data.is_optimistic)
+  if [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
+    :
+  else
+    echo "Consensus client is not using checkpoint sync" # we are testing for checkpoint sync in this case
+    exit 1
+  fi
+  if [ "prysm" = "$cl" ]; then
+    # BUG with prysm until version 5.0.4
+    [ "true" = "$el_offline" ] || {
+      echo "el is offline"
+      exit 1
+    }
+  else
+    [ "false" = "$el_offline" ] || {
+      echo "el is offline"
+      exit 1
+    }
+  fi
+
+  # on mainnet after CL sync (checkpoint sync), the client should be syncing (mainnet, sepolia, holesky)
+  if [ "false" = "$el_sync_status" ]; then
+    echo "el is not syncing"
+    exit 1
+  fi
+
+}
+
 run_test() {
   # Arrange
   local network="$1"
@@ -221,35 +255,6 @@ run_test() {
     cat $output_log_cl
     exit 1
   }
-  el_offline=$(echo $cl_sync_status | jq .data.el_offline)
-  cl_is_syncing=$(echo $cl_sync_status | jq .data.is_syncing)
-  cl_is_optimistic=$(echo $cl_sync_status | jq .data.is_optimistic)
 
-  # if [ "$cl_is_syncing" = "true" ]; then
-  #   :
-  if [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
-    :
-  else
-    echo "Consensus client is not using checkpoint sync" # we are testing for checkpoint sync in this case
-    exit 1
-  fi
-  if [ "prysm" = "$cl" ]; then
-    # BUG with prysm until version 5.0.4
-    [ "true" = "$el_offline" ] || {
-      echo "el is offline"
-      exit 1
-    }
-  else
-    [ "false" = "$el_offline" ] || {
-      echo "el is offline"
-      exit 1
-    }
-  fi
-
-  # on mainnet after CL sync (checkpoint sync), the client should be syncing (mainnet, sepolia, holesky)
-  if [ "false" = "$el_sync_status" ]; then
-    echo "el is not syncing"
-    exit 1
-  fi
-  # TODO el sync status
+  test_checkpoint_sync $cl_sync_status $el_sync_status $cl 
 }
