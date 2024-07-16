@@ -17,7 +17,7 @@ teku_wait_time=60
 besu_wait_time=420 # for sync status, but besu api starts in 10s
 erigon_wait_time=420 # yup, it is downloading snapshots on mainnet, which is very slow ...
 geth_wait_time=420
-nethermind_wait_time=420
+nethermind_wait_time=480 # nethermind-lighthouse needs more time to sync
 reth_wait_time=420
 
 cleanup() {
@@ -59,6 +59,7 @@ get_wait_time() {
   local cl_name="nimbus-eth2"
   local wait_time=$(get_wait_time $besu_wait_time $nimbus_eth2_wait_time)
 
+  # this actually finishes in 2 minutes, kept for consistency with other tests
   run_test "$network" "$el_name" "$cl_name" "$wait_time"
 }
 
@@ -106,7 +107,6 @@ get_wait_time() {
   run_test "$network" "$el_name" "$cl_name" "$wait_time"
 }
 
-# TODO failing
 @test "$network: erigon-prysm" {
   local el_name="erigon"
   local cl_name="prysm"
@@ -115,7 +115,6 @@ get_wait_time() {
 
   run_test "$network" "$el_name" "$cl_name" "$wait_time"
 }
-# TODO failing
 @test "$network: erigon-teku" {
   local el_name="erigon"
   local cl_name="teku"
