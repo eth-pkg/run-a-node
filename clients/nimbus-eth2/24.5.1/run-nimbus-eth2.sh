@@ -175,4 +175,4 @@ if [ -n "$NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE" ]; then
 fi
 
 # on ci the postrm fails, so it not in path
-exec nimbus_beacon_node $OPTIONS
+exec /usr/lib/eth-node-nimbus-eth2/bin/nimbus_beacon_node $OPTIONS
