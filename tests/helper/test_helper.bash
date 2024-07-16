@@ -170,7 +170,7 @@ test_checkpoint_sync() {
   local cl_is_optimistic=$(echo $cl_sync_status | jq .data.is_optimistic)
 
   # strange on mainnet sync is quicker than on sepolia
-  if [ "mainnet" = "$netork"]; then
+  if [ "mainnet" = "$network"]; then
     if [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
       :
     elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ] && [ "$cl" = "teku" ]; then
