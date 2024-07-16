@@ -242,6 +242,10 @@ run_test() {
 
   kill_process "$el_pid"
 
+  if [ "nimbu-eth2" = "$cl" ];then 
+    echo "$output_log_cl"
+  fi 
+
   # Cleanup first, otherwise test process will hang
   # fix lodestar hanging issue, while running the tests
   if [ "lodestar" = "$cl" ]; then
