@@ -164,6 +164,7 @@ test_checkpoint_sync() {
   local el_sync_status=$2
   local cl=$3
   local el=$4
+  local network=$5
   local el_offline=$(echo $cl_sync_status | jq .data.el_offline)
   local cl_is_syncing=$(echo $cl_sync_status | jq .data.is_syncing)
   local cl_is_optimistic=$(echo $cl_sync_status | jq .data.is_optimistic)
@@ -274,5 +275,5 @@ run_test() {
     exit 1
   }
 
-  test_checkpoint_sync "$cl_sync_status" "$el_sync_status" "$cl" "$el"
+  test_checkpoint_sync "$cl_sync_status" "$el_sync_status" "$cl" "$el" "$network"
 }
