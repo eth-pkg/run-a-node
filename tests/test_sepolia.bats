@@ -8,8 +8,10 @@ load helper/test_helper.bash
 
 network=sepolia
 # wait time until cl endpoints are running (with slower internet)
-lighthouse_wait_time=180 #requires initial checkpoint sync
-lodestar_wait_time=180   # requires initial checkpoint sync
+# sepolia endpoints are slower to sync
+
+lighthouse_wait_time=540 #requires initial checkpoint sync
+lodestar_wait_time=540   # requires initial checkpoint sync
 nimbus_eth2_wait_time=20 # starts before initial checkpoint sync
 prysm_wait_time=60      # had to increase time as the el_offline takes time
 teku_wait_time=60
