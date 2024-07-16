@@ -171,9 +171,9 @@ test_checkpoint_sync() {
   if [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
     :
   elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ] && [ "$cl" = "teku" ]; then
-    :  # teku is doing backfill with checkpoint sync
+    : # teku is doing backfill with checkpoint sync
   elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ] && [ "$cl" = "nimbus-eth2" ]; then
-    :  # nimbus-eth2 is also doing backfilling, so sync status is true  
+    : # nimbus-eth2 is also doing backfilling, so sync status is true
   else
     echo "Consensus client is not using checkpoint sync" # we are testing for checkpoint sync in this case
     exit 1
@@ -233,6 +233,8 @@ run_test() {
 
   sleep "$wait_time"
 
+  echo "$output_log_cl"
+
   chain_id_el=$(get_chain_id_on_eth1 "http://localhost:8545" || true)
   chain_id_cl=$(get_chain_id_on_beacon_chain "http://localhost:5052" || true)
   cl_sync_status=$(call_json_api "http://localhost:5052/eth/v1/node/syncing" || true)
@@ -241,10 +243,6 @@ run_test() {
   echo "response: $el_sync_status" >&2
 
   kill_process "$el_pid"
-
-  if [ "nimbus-eth2" = "$cl" ];then 
-    echo "$output_log_cl"
-  fi 
 
   # Cleanup first, otherwise test process will hang
   # fix lodestar hanging issue, while running the tests
