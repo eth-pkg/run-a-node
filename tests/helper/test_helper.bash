@@ -171,16 +171,15 @@ test_checkpoint_sync() {
 
   # strange on mainnet sync is quicker than on sepolia
   if [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "true" ]; then
-    :
+    : # it means we are synced with CL, but EL is still syncing
   elif [ "$cl_is_syncing" = "false" ] && [ "$cl_is_optimistic" = "false" ] && [ "$cl" = "lighthouse" ]; then
     : # when lighthouse is stalled, it returns false, meaning it started to sync, but there is no peer
     : # TODO bettter test for this
-  elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ] && [ "$cl" = "teku" ]; then
-    : # teku is doing backfill with checkpoint sync
-  elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ] && [ "$cl" = "nimbus-eth2" ]; then
-    : # nimbus-eth2 is also doing backfilling, so sync status is true
+    : # this happens mostly on sepolia network
+  elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ] && [ "$cl" = "lodestar" ]; then 
+    : # still syncing on some networks
   else
-    echo "Consensus client is not using checkpoint sync" # we are testing for checkpoint sync in this case
+    echo "Consensus client is not syncing" # we are testing for checkpoint sync in this case
     exit 1
   fi
 
