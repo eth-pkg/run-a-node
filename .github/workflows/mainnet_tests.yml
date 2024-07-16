@@ -14,11 +14,11 @@ jobs:
       strategy:
         matrix:
           cl_name:
-            # - lighthouse
-            # - lodestar
+            - lighthouse
+            - lodestar
             - nimbus-eth2
-            # - prysm
-            # - teku
+            - prysm
+            - teku
         fail-fast: false
       steps:
           - name: Checkout code
@@ -29,84 +29,84 @@ jobs:
               network: mainnet
               el_name: besu 
               cl_name: ${{matrix.cl_name}}
-  # erigon:
-  #     runs-on: ubuntu-24.04
-  #     strategy:
-  #       matrix:
-  #         cl_name:
-  #           - lighthouse
-  #           - lodestar
-  #           - nimbus-eth2
-  #           - prysm
-  #           - teku
-  #       fail-fast: false
-  #     steps:
-  #         - name: Checkout code
-  #           uses: actions/checkout@v4
+  erigon:
+      runs-on: ubuntu-24.04
+      strategy:
+        matrix:
+          cl_name:
+            - lighthouse
+            - lodestar
+            - nimbus-eth2
+            - prysm
+            - teku
+        fail-fast: false
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
     
-  #         - uses: ./node-test
-  #           with:
-  #             network: mainnet
-  #             el_name: erigon 
-  #             cl_name: ${{matrix.cl_name}}
-  # geth:
-  #     runs-on: ubuntu-24.04
-  #     strategy:
-  #       matrix:
-  #         cl_name:
-  #           - lighthouse
-  #           - lodestar
-  #           - nimbus-eth2
-  #           - prysm
-  #           - teku
-  #       fail-fast: false
-  #     steps:
-  #         - name: Checkout code
-  #           uses: actions/checkout@v4
+          - uses: ./node-test
+            with:
+              network: mainnet
+              el_name: erigon 
+              cl_name: ${{matrix.cl_name}}
+  geth:
+      runs-on: ubuntu-24.04
+      strategy:
+        matrix:
+          cl_name:
+            - lighthouse
+            - lodestar
+            - nimbus-eth2
+            - prysm
+            - teku
+        fail-fast: false
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
     
-  #         - uses: ./node-test
-  #           with:
-  #             network: mainnet
-  #             el_name: geth 
-  #             cl_name: ${{matrix.cl_name}}
+          - uses: ./node-test
+            with:
+              network: mainnet
+              el_name: geth 
+              cl_name: ${{matrix.cl_name}}
 
-  # nethermind:
-  #     runs-on: ubuntu-24.04
-  #     strategy:
-  #       matrix:
-  #         cl_name:
-  #           - lighthouse
-  #           - lodestar
-  #           - nimbus-eth2
-  #           - prysm
-  #           - teku
-  #       fail-fast: false
-  #     steps:
-  #         - name: Checkout code
-  #           uses: actions/checkout@v4
+  nethermind:
+      runs-on: ubuntu-24.04
+      strategy:
+        matrix:
+          cl_name:
+            - lighthouse
+            - lodestar
+            - nimbus-eth2
+            - prysm
+            - teku
+        fail-fast: false
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
     
-  #         - uses: ./node-test
-  #           with:
-  #             network: mainnet
-  #             el_name: nethermind 
-  #             cl_name: ${{matrix.cl_name}}
-  # reth:
-  #     runs-on: ubuntu-24.04
-  #     strategy:
-  #       matrix:
-  #         cl_name:
-  #           - lighthouse
-  #           - lodestar
-  #           - nimbus-eth2
-  #           - prysm
-  #           - teku
-  #       fail-fast: false
-  #     steps:
-  #         - name: Checkout code
-  #           uses: actions/checkout@v4
+          - uses: ./node-test
+            with:
+              network: mainnet
+              el_name: nethermind 
+              cl_name: ${{matrix.cl_name}}
+  reth:
+      runs-on: ubuntu-24.04
+      strategy:
+        matrix:
+          cl_name:
+            - lighthouse
+            - lodestar
+            - nimbus-eth2
+            - prysm
+            - teku
+        fail-fast: false
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
     
-  #         - uses: ./node-test
-  #           with:
-  #             networK: mainnet
-  #             el_name: reth 
-  #             cl_name: ${{matrix.cl_name}}
+          - uses: ./node-test
+            with:
+              networK: mainnet
+              el_name: reth 
+              cl_name: ${{matrix.cl_name}}
