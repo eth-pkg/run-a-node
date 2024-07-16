@@ -8,11 +8,11 @@ load helper/test_helper.bash
 
 network=sepolia
 # wait time until cl endpoints are running (with slower internet)
-lighthouse_wait_time=600 #requires initial checkpoint sync
-lodestar_wait_time=600   # requires initial checkpoint sync
-nimbus_eth2_wait_time=600 # starts before initial checkpoint sync
+lighthouse_wait_time=180 #requires initial checkpoint sync
+lodestar_wait_time=180   # requires initial checkpoint sync
+nimbus_eth2_wait_time=20 # starts before initial checkpoint sync
 prysm_wait_time=60      # had to increase time as the el_offline takes time
-teku_wait_time=600
+teku_wait_time=60
 
 besu_wait_time=420 # for sync status, but besu api starts in 10s
 erigon_wait_time=420 # yup, it is downloading snapshots on mainnet, which is very slow ...
