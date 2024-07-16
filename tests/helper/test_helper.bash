@@ -242,7 +242,7 @@ run_test() {
 
   kill_process "$el_pid"
 
-  if [ "nimbu-eth2" = "$cl" ];then 
+  if [ "nimbus-eth2" = "$cl" ];then 
     echo "$output_log_cl"
   fi 
 
