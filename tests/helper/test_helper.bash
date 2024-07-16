@@ -176,7 +176,7 @@ test_sync() {
     : # when lighthouse is stalled, it returns false, meaning it started to sync, but there is no peer
     : # TODO bettter test for this
     : # this happens mostly on sepolia network
-  elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ] then 
+  elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ]; then 
     : # still syncing on some networks
   else
     echo "Consensus client is not syncing" # we are testing for checkpoint sync in this case
