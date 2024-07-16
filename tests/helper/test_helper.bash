@@ -233,7 +233,7 @@ run_test() {
 
   sleep "$wait_time"
 
-  echo "$output_log_cl"
+  cat "$output_log_cl"
 
   chain_id_el=$(get_chain_id_on_eth1 "http://localhost:8545" || true)
   chain_id_cl=$(get_chain_id_on_beacon_chain "http://localhost:5052" || true)
