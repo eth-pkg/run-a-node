@@ -246,9 +246,9 @@ run_test() {
   bash run-a-client.sh --network "$network" --el "$el" >"$output_log_el" 2>&1 &
   el_pid=$!
 
-  if [ "ephemery" = "$network" ]; then 
+  if [ "ephemery" = "$network" ]; then
     sleep 30 # wait until ephemery state downloads
-  fi 
+  fi
 
   nohup ./run-a-client.sh --network "$network" --cl "$cl" >"$output_log_cl" 2>&1 &
   cl_pid=$!
@@ -259,8 +259,16 @@ run_test() {
   chain_id_cl=$(get_chain_id_on_beacon_chain "http://localhost:5052" || true)
   cl_sync_status=$(call_json_api "http://localhost:5052/eth/v1/node/syncing" || true)
   echo "response: $cl_sync_status" >&2
+  if [ -z "$cl_sync_status" ]; then
+    echo "---------------- CL LOG ---------------------"
+    cat $output_log_cl
+  fi
   el_sync_status=$(get_el_syncing "http://localhost:8545" || true)
   echo "response: $el_sync_status" >&2
+  if [ -z "$el_sync_status" ]; then
+    echo "---------------- EL LOG ---------------------"
+    cat $output_log_el
+  fi
 
   kill_process "$el_pid"
 
