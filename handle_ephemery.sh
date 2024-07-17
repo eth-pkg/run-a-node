@@ -7,7 +7,7 @@ if [ "$network" == "ephemery" ]; then
     # TODO option to reset
     # rm -rf $ephemery_dir
     if [ ! -d "$BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR" ];then
-        wget -q https://github.com/ephemery-testnet/ephemery-genesis/releases/download/ephemery-111/testnet-all.tar.gz
+        wget https://github.com/ephemery-testnet/ephemery-genesis/releases/download/ephemery-111/testnet-all.tar.gz
         mkdir -p $BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR && tar -xzf testnet-all.tar.gz -C $BASE_CONFIG_CUSTOM_NETWORK_TESTNET_DIR
         rm testnet-all.tar.gz 
     fi 
