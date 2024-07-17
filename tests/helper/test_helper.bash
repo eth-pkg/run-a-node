@@ -245,6 +245,11 @@ run_test() {
   # Act
   bash run-a-client.sh --network "$network" --el "$el" >"$output_log_el" 2>&1 &
   el_pid=$!
+
+  if [ "ephemery" = "$network" ]; then 
+    wait 30 # wait until ephemery state downloads
+  fi 
+
   nohup ./run-a-client.sh --network "$network" --cl "$cl" >"$output_log_cl" 2>&1 &
   cl_pid=$!
 
