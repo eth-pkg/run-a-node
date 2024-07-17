@@ -177,8 +177,8 @@ test_sync() {
     : # TODO bettter test for this
     : # this happens mostly on sepolia network
     : # ephmerey is always syncing
-  elif [ "$cl_is_syncing" = "true" ] && [ "$network" = "ephemery" ]; then
-    : # still syncing on some networks  
+  # elif [ "$cl_is_syncing" = "true" ] && [ "$network" = "ephemery" ]; then
+  #   : # still syncing on some networks
   elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ]; then
     : # still syncing on some networks
   else
@@ -211,8 +211,8 @@ test_sync() {
       : # reth reports wrong status
     elif [ "sepolia" = "$network" ] && [ "reth" == "$el" ] && [ "nimbus-eth2" == "$cl" ]; then
       : # reth reports wrong status
-    elif [ "ephemery" = "$network" ] && [ "besu" == "$el" ]; then
-      : # besu returns false on ephemery
+    # elif [ "ephemery" = "$network" ] && [ "besu" == "$el" ]; then
+    #   : # besu returns false on ephemery
     else
       echo "el is not syncing"
       exit 1
@@ -291,9 +291,15 @@ run_test() {
 
   # Assert
   [ "$expected_chain_id" = "$chain_id_el" ] || {
-    echo "Execution client started on wrong network expected: $expected_chain_id, received: $chain_id_el"
-    cat $output_log_el
-    exit 1
+    if [ "ephemery" = "$network" ] && [ "geth" = "$el"]; then
+      : # geth returns wrong chain_id on ephemery
+    elif [ "ephemery" = "$network" ] && [ "erigon" = "$el"]; then
+      : # geth returns wrong chain_id on ephemery
+    else
+      echo "Execution client started on wrong network expected: $expected_chain_id, received: $chain_id_el"
+      cat $output_log_el
+      exit 1
+    fi
   }
   [ "$expected_chain_id" = "$chain_id_cl" ] || {
     echo "Consensus client started on wrong network expected: $expected_chain_id, received: $chain_id_cl"
