@@ -208,6 +208,8 @@ test_sync() {
       : # reth reports wrong status
     elif [ "sepolia" = "$network" ] && [ "reth" == "$el" ] && [ "nimbus-eth2" == "$cl" ]; then
       : # reth reports wrong status
+    elif [ "ephemery" = "$network" ]; then
+      : # should be already in sync
     else
       echo "el is not syncing"
       exit 1
@@ -223,7 +225,7 @@ run_test() {
   local cl="$3"
   local wait_time="$4"
   local output_log_el output_log_cl
-  local expected_chain_id=$(get_chain_id_for_network $network)
+  local expected_chain_id
   local chain_id_cl chain_id_el
   local cl_sync_status el_offline cl_is_syncing el_sync_status cl_is_optimistic
 
@@ -253,22 +255,24 @@ run_test() {
   nohup ./run-a-client.sh --network "$network" --cl "$cl" >"$output_log_cl" 2>&1 &
   cl_pid=$!
 
+  echo "---------------- CL LOG ---------------------"
+  cat $output_log_cl
+
+  echo "---------------- EL LOG ---------------------"
+  cat $output_log_el
+
+  # must run after starting one client, as ephemery network id is coming from file
+  expected_chain_id=$(get_chain_id_for_network $network)
+
   sleep "$wait_time"
 
   chain_id_el=$(get_chain_id_on_eth1 "http://localhost:8545" || true)
   chain_id_cl=$(get_chain_id_on_beacon_chain "http://localhost:5052" || true)
   cl_sync_status=$(call_json_api "http://localhost:5052/eth/v1/node/syncing" || true)
   echo "response: $cl_sync_status" >&2
-  if [ -z "$cl_sync_status" ]; then
-    echo "---------------- CL LOG ---------------------"
-    cat $output_log_cl
-  fi
+
   el_sync_status=$(get_el_syncing "http://localhost:8545" || true)
   echo "response: $el_sync_status" >&2
-  if [ -z "$el_sync_status" ]; then
-    echo "---------------- EL LOG ---------------------"
-    cat $output_log_el
-  fi
 
   kill_process "$el_pid"
 
