@@ -247,7 +247,7 @@ run_test() {
   el_pid=$!
 
   if [ "ephemery" = "$network" ]; then 
-    wait 30 # wait until ephemery state downloads
+    sleep 30 # wait until ephemery state downloads
   fi 
 
   nohup ./run-a-client.sh --network "$network" --cl "$cl" >"$output_log_cl" 2>&1 &
