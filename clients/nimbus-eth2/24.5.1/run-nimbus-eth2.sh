@@ -159,13 +159,15 @@ add_option "--payload-builder-url" "$NIMBUS_ETH2_PAYLOAD_BUILDER_URL"
 add_option "--local-block-value-boost" "$NIMBUS_ETH2_LOCAL_BLOCK_VALUE_BOOST"
 add_option "--history" "$NIMBUS_ETH2_HISTORY"
 
-echo "Using Options: $OPTIONS"
 
-echo "Using Options: nimbus-eth2 $OPTIONS"
+echo "Using Options: nimbus_beacon_node $OPTIONS"
 
 # hack to download state before starting client
 if [ -n "$NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE" ]; then
     echo "Downloading checkpoint state for nimbus-eth2"
+    echo "curl -o $NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE \
+            -H 'Accept: application/octet-stream' \
+            $NIMBUS_ETH2_EXTERNAL_BEACON_API_URL/eth/v2/debug/beacon/states/finalized"
     if [ "$NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE" != "" ]; then
         curl -o $NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE \
             -H 'Accept: application/octet-stream' \
