@@ -167,11 +167,11 @@ if [ -n "$NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE" ]; then
     echo "Downloading checkpoint state for nimbus-eth2"
     echo "curl -o $NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE \
             -H 'Accept: application/octet-stream' \
-            $NIMBUS_ETH2_EXTERNAL_BEACON_API_URL/eth/v2/debug/beacon/states/finalized"
+            $BASE_CONFIG_CL_CHECKPPOINT_SYNC_URLr/eth/v2/debug/beacon/states/finalized"
     if [ "$NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE" != "" ]; then
         curl -o $NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE \
             -H 'Accept: application/octet-stream' \
-            $NIMBUS_ETH2_EXTERNAL_BEACON_API_URL/eth/v2/debug/beacon/states/finalized
+            $BASE_CONFIG_CL_CHECKPPOINT_SYNC_URL/eth/v2/debug/beacon/states/finalized
 
     fi
 fi
