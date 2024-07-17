@@ -176,6 +176,9 @@ test_sync() {
     : # when lighthouse is stalled, it returns false, meaning it started to sync, but there is no peer
     : # TODO bettter test for this
     : # this happens mostly on sepolia network
+    : # ephmerey is always syncing
+  elif [ "$cl_is_syncing" = "true" ] && [ "$network" = "ephemery" ]; then
+    : # still syncing on some networks  
   elif [ "$cl_is_syncing" = "true" ] && [ "$cl_is_optimistic" = "true" ]; then
     : # still syncing on some networks
   else
@@ -208,8 +211,8 @@ test_sync() {
       : # reth reports wrong status
     elif [ "sepolia" = "$network" ] && [ "reth" == "$el" ] && [ "nimbus-eth2" == "$cl" ]; then
       : # reth reports wrong status
-    elif [ "ephemery" = "$network" ]; then
-      : # should be already in sync
+    elif [ "ephemery" = "$network" ] && [ "besu" == "$el" ]; then
+      : # besu returns false on ephemery
     else
       echo "el is not syncing"
       exit 1
@@ -255,11 +258,11 @@ run_test() {
   nohup ./run-a-client.sh --network "$network" --cl "$cl" >"$output_log_cl" 2>&1 &
   cl_pid=$!
 
-  echo "---------------- CL LOG ---------------------"
-  cat $output_log_cl
+  # echo "---------------- CL LOG ---------------------"
+  # cat $output_log_cl
 
-  echo "---------------- EL LOG ---------------------"
-  cat $output_log_el
+  # echo "---------------- EL LOG ---------------------"
+  # cat $output_log_el
 
   # must run after starting one client, as ephemery network id is coming from file
   expected_chain_id=$(get_chain_id_for_network $network)
