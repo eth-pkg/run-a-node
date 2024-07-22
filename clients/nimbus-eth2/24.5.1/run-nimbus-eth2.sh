@@ -1,12 +1,12 @@
-#!/usr/bin/env bash 
+#!/usr/bin/env bash
 
-set -e 
+set -e
 
 display_help() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --conf-file FILE, -e FILE   Path to .conf formatted configuration file."   
+    echo "  --conf-file FILE, -e FILE   Path to .conf formatted configuration file."
     echo "  --help, -h                    Displays this help text and exits."
     echo "  --version, -v                 Displays the version and exits."
     exit 0
@@ -24,22 +24,22 @@ VERSION=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --conf-file|-e)
-            CONFIG_FILES+=("$2")
-            shift 2
-            ;;
-        --help|-h)
-            HELP=true
-            shift
-            ;;
-        --version|-v)
-            VERSION=true
-            shift
-            ;;  
-        *)
-            echo "Error: Unknown option $1"
-            display_help
-            ;;
+    --conf-file | -e)
+        CONFIG_FILES+=("$2")
+        shift 2
+        ;;
+    --help | -h)
+        HELP=true
+        shift
+        ;;
+    --version | -v)
+        VERSION=true
+        shift
+        ;;
+    *)
+        echo "Error: Unknown option $1"
+        display_help
+        ;;
     esac
 done
 
@@ -69,15 +69,15 @@ done
 OPTIONS=""
 
 add_option() {
-  local option=$1
-  local value=$2
-  if [ -n "$value" ]; then
-    if [ "$value" == "" ];then 
-        OPTIONS="$OPTIONS $option"
-    else 
-        OPTIONS="$OPTIONS $option=$value"
-    fi 
-  fi
+    local option=$1
+    local value=$2
+    if [ -n "$value" ]; then
+        if [ "$value" == "" ]; then
+            OPTIONS="$OPTIONS $option"
+        else
+            OPTIONS="$OPTIONS $option=$value"
+        fi
+    fi
 }
 
 add_option "--config-file" "$NIMBUS_ETH2_CONFIG_FILE"
@@ -159,8 +159,22 @@ add_option "--payload-builder-url" "$NIMBUS_ETH2_PAYLOAD_BUILDER_URL"
 add_option "--local-block-value-boost" "$NIMBUS_ETH2_LOCAL_BLOCK_VALUE_BOOST"
 add_option "--history" "$NIMBUS_ETH2_HISTORY"
 
-echo "Using Options: $OPTIONS"
 
-echo "Using Options: nimbus-eth2 $OPTIONS"
+echo "Using Options: nimbus_beacon_node $OPTIONS"
 
-nimbus_beacon_node $OPTIONS
+# hack to download state before starting client
+if [ -n "$NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE" ]; then
+    echo "Downloading checkpoint state for nimbus-eth2"
+    echo "curl -o $NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE \
+            -H 'Accept: application/octet-stream' \
+            $BASE_CONFIG_CL_CHECKPPOINT_SYNC_URLr/eth/v2/debug/beacon/states/finalized"
+    if [ "$NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE" != "" ]; then
+        curl -o $NIMBUS_ETH2_FINALIZED_CHECKPOINT_STATE \
+            -H 'Accept: application/octet-stream' \
+            $BASE_CONFIG_CL_CHECKPPOINT_SYNC_URL/eth/v2/debug/beacon/states/finalized
+
+    fi
+fi
+
+# on ci the postrm fails, so it not in path
+exec /usr/lib/eth-node-nimbus-eth2/bin/nimbus_beacon_node $OPTIONS

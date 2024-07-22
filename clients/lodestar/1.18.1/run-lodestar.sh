@@ -158,4 +158,6 @@ append_option "--network.connectToDiscv5Bootnodes" "$LODESTAR_CLI_NETWORK_CONNEC
 append_option "--genesisStateFile" "$LODESTAR_CLI_BN_GENSIS_STATE_FILE"
 
 echo "Starting lodestar beacon $OPTIONS"
-lodestar beacon $OPTIONS
+
+# on ci the postrm fails, so it not in path
+exec /usr/lib/eth-node-lodestar/bin/lodestar beacon $OPTIONS

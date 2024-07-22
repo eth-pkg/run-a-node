@@ -120,7 +120,6 @@ append_flag "--slasher" "$PRSYM_CLI_SLASHER"
 append_flag "--interop-eth1data-votes" "$PRSYM_CLI_INTEROP_ETH1DATA_VOTES"
 append_flag "--force-clear-db" "$PRSYM_CLI_FORCE_CLEAR_DB"
 
-
 append_option "--api-timeout" "$PRSYM_CLI_API_TIMEOUT"
 append_option "--bootstrap-node" "$PRSYM_CLI_BOOTSTRAP_NODE"
 append_option "--chain-config-file" "$PRSYM_CLI_CHAIN_CONFIG_FILE"
@@ -218,4 +217,5 @@ append_option "--interop-num-validators" "$PRSYM_CLI_INTEROP_NUM_VALIDATORS"
 
 echo "Using Options: beacon-chain $OPTIONS"
 
-beacon-chain $OPTIONS
+# on ci the postrm fails, so it not in path
+exec /usr/lib/eth-node-prysm/bin/beacon-chain $OPTIONS

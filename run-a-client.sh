@@ -30,7 +30,7 @@ create_data_dir_if_not_exists() {
 create_secrets_file_if_not_exists() {
     local file="$1"
     if [ ! -f "$file" ]; then
-        openssl rand -hex 32 | tr -d "\n" | sudo tee "$file" > /dev/null
+        openssl rand -hex 32 | tr -d "\n" | tee "$file" > /dev/null
     fi
 }
 
@@ -182,11 +182,11 @@ export shared_run
 if [ -n "$client_name" ]; then
     script="$script_dir/clients/$client_name/$latest_client_version/run-$client_name.sh"
     chmod +x "$script"
-    "$script" --conf-file "$script_dir/network/$network/$sub_dir/$client_name/$client_name-$network.conf" $additional_confs
+    exec "$script" --conf-file "$script_dir/network/$network/$sub_dir/$client_name/$client_name-$network.conf" $additional_confs
 elif [ "$run" == "validator" ]; then
     script="$script_dir/clients/$consensus_client/$latest_consensus_client_version/run-validator.sh"
     chmod +x "$script"
-    "$script" --env-file "$script_dir/network/$network/$execution_client-$consensus_client/validator.conf"
+    exec "$script" --env-file "$script_dir/network/$network/$execution_client-$consensus_client/validator.conf"
 else
     echo "Unsupported option"
     exit 1

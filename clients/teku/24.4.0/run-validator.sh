@@ -1,3 +1,5 @@
+#!/usr/bin/env bash 
+
 set -e 
 
 display_help() {
@@ -141,4 +143,4 @@ append_option "--validators-proposer-default-fee-recipient" $TEKU_CLI_VALIDATOR_
 
 echo "Using Options: $OPTIONS"
 
-teku validator-client $OPTIONS
+exec teku validator-client $OPTIONS

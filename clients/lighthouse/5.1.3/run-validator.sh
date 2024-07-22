@@ -1,4 +1,6 @@
-set -e 
+#!/usr/bin/env bash 
+
+set -e
 
 display_help() {
     echo "Usage: $0 [OPTIONS]"
@@ -147,4 +149,4 @@ append_option "--web3-signer-max-idle-connections" "$LIGHTHOUSE_CLI_VALIDATOR_WE
 
 echo "Using Options: $OPTIONS"
 
-lighthouse validator_client $OPTIONS
+exec lighthouse validator_client $OPTIONS

@@ -1,0 +1,56 @@
+name: 'Run Ethereum Node Tests'
+description: 'Composite action to run Ethereum Node Tests for selected client pairs for selected networks'
+inputs:
+  cl_name:
+    description: 'cl name'
+    required: true
+  el_name:
+    description: 'el name'
+    required: true
+  network:
+    description: 'Ethereum network name'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Add eth-nodes repository
+      run: |
+        sudo curl -fsSL https://packages.eth-pkg.com/keys/ethpkg-archive-keyring.asc -o /usr/share/keyrings/ethpkg-archive-keyring.asc
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ethpkg-archive-keyring.asc] http://packages.eth-pkg.com/noble-main noble main" | sudo tee -a /etc/apt/sources.list.d/ethpkg.list
+        sudo apt update
+      shell: bash
+
+   
+    # caches packages not to hit the repository in each CI run 
+    - name: Cache apt packages
+      uses: eth-pkg/apt-deb-cache@v0.2.4
+      with:
+        packages: |
+          eth-node-besu eth-node-erigon eth-node-geth eth-node-nethermind eth-node-reth \
+          eth-node-lighthouse eth-node-lodestar eth-node-nimbus-eth2 eth-node-prysm eth-node-teku \
+          bats  
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'oracle'
+        java-version: '21'
+
+    - name: Install dotnet
+      run: |
+        sudo apt update
+        sudo apt install -y aspnetcore-runtime-8.0
+      shell: bash
+
+    - name: Install node.js dep
+      run: | 
+        curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+        sudo apt install -y nodejs
+      shell: bash
+
+    - name: Run test
+      run: | 
+        # timeout in 10m if client is offline, the tests is stuck, this is a workaround of that
+        timeout 11m bats --show-output-of-passing-tests tests/test_${{inputs.network}}.bats --filter ${{ inputs.el_name }}-${{ inputs.cl_name }}
+      shell: bash
+
